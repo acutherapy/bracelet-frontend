@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/bracelet-frontend/static/css/main.e6c13ad2.css",
-    "main.js": "/bracelet-frontend/static/js/main.475a1739.js",
+    "main.js": "/bracelet-frontend/static/js/main.ff491294.js",
     "static/js/488.abec6102.chunk.js": "/bracelet-frontend/static/js/488.abec6102.chunk.js",
     "service-worker.js": "/bracelet-frontend/service-worker.js",
     "index.html": "/bracelet-frontend/index.html",
     "main.e6c13ad2.css.map": "/bracelet-frontend/static/css/main.e6c13ad2.css.map",
-    "main.475a1739.js.map": "/bracelet-frontend/static/js/main.475a1739.js.map",
+    "main.ff491294.js.map": "/bracelet-frontend/static/js/main.ff491294.js.map",
     "488.abec6102.chunk.js.map": "/bracelet-frontend/static/js/488.abec6102.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.475a1739.js"
+    "static/js/main.ff491294.js"
   ]
 }
