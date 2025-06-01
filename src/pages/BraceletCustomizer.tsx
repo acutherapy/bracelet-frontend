@@ -73,7 +73,7 @@ const getSizes = (gender: '男' | '女', artBeadSize: number) => {
   }
 };
 
-const maxSky = 7, maxEarth = 8, maxArt = 8;
+const maxSky = 7, maxEarth = 8, maxRen = 8;
 
 const BraceletCustomizer: React.FC = () => {
   const [gender, setGender] = useState<'男' | '女'>('男');
@@ -82,8 +82,9 @@ const BraceletCustomizer: React.FC = () => {
   const [mainColor, setMainColor] = useState('红色');
   const [skyColors, setSkyColors] = useState(FIVE_COLORS.map(() => 0));
   const [earthColors, setEarthColors] = useState(FIVE_COLORS.map(() => 0));
-  const [artColors, setArtColors] = useState(FIVE_COLORS.map(() => 0));
-  const [artBeadSize, setArtBeadSize] = useState(8); // 男可选8/6，女固定6
+  const [renColors, setRenColors] = useState(FIVE_COLORS.map(() => 0));
+  const [renBeadSize, setRenBeadSize] = useState(8); // 男可选8/6，女固定6
+  const [renManual, setRenManual] = useState(false); // 是否手动调整过
   const [engraving, setEngraving] = useState(false);
   const [engravingText, setEngravingText] = useState('');
   const [braceletLength, setBraceletLength] = useState(170); // 默认170mm
@@ -123,11 +124,11 @@ const BraceletCustomizer: React.FC = () => {
 
   // 性别切换时重置术珠尺寸
   React.useEffect(() => {
-    if (gender === '女') setArtBeadSize(6);
+    if (gender === '女') setRenBeadSize(6);
   }, [gender]);
 
   // 尺寸
-  const sizes = getSizes(gender, artBeadSize);
+  const sizes = getSizes(gender, renBeadSize);
 
   // 天珠最多的颜色自动设为主珠颜色
   React.useEffect(() => {
@@ -142,7 +143,7 @@ const BraceletCustomizer: React.FC = () => {
   // 天珠、地珠、术珠五行色分配
   const skyTotal = skyColors.reduce((a, b) => a + b, 0);
   const earthTotal = earthColors.reduce((a, b) => a + b, 0);
-  const artTotal = artColors.reduce((a, b) => a + b, 0);
+  const renTotal = renColors.reduce((a, b) => a + b, 0);
 
   // 用户输入长度转为mm
   const userLengthMM = useMemo(() => {
@@ -155,18 +156,48 @@ const BraceletCustomizer: React.FC = () => {
   // 固定珠子总长
   const fixedLength = mainBead.size + sizes.sky * maxSky + sizes.earth * maxEarth;
 
-  // 自动计算术珠数量（剩余长度/术珠直径，向下取整，最大8，最小0）
-  const autoArtCount = Math.max(0, Math.min(maxArt, Math.floor((userLengthMM - fixedLength) / sizes.art)));
+  // 需要分配的人珠数量（自动计算）
+  const renCount = useMemo(() => Math.max(0, Math.min(maxRen, Math.floor((userLengthMM - (mainBead.size + sizes.sky * maxSky + sizes.earth * maxEarth)) / renBeadSize))), [userLengthMM, mainBead.size, sizes.sky, sizes.earth, maxSky, maxEarth, renBeadSize]);
 
-  // 术珠分配校验
+  // 智能分配人珠（自动执行，除非用户手动调整）
   React.useEffect(() => {
-    if (artTotal !== autoArtCount) {
-      // 自动分配第一个颜色
-      const arr = [autoArtCount, 0, 0, 0, 0];
-      setArtColors(arr);
+    if (renManual) return; // 用户手动调整后不再自动分配
+    // 统计主珠、天珠、地珠五色数量
+    const baseStats = FIVE_COLORS.map((c, i) =>
+      skyColors[i] + earthColors[i] + (mainColor === c.name ? 1 : 0)
+    );
+    // 目标：让五色总数尽量平衡
+    let renArr = [0, 0, 0, 0, 0];
+    let stats = [...baseStats];
+    for (let i = 0; i < renCount; i++) {
+      // 找到当前最少的颜色分配一个人珠
+      const minIdx = stats.indexOf(Math.min(...stats));
+      renArr[minIdx]++;
+      stats[minIdx]++;
     }
-    // eslint-disable-next-line
-  }, [autoArtCount]);
+    setRenColors(renArr);
+  }, [mainColor, skyColors, earthColors, userLengthMM, sizes, mainBead.size, renBeadSize, renManual, renCount]);
+
+  // 人珠手动调整（总和不能超过renCount）
+  const handleRenColorChange = (arr: number[]) => {
+    let sum = arr.reduce((a, b) => a + b, 0);
+    if (sum > renCount) {
+      // 超出自动截断
+      let left = renCount;
+      arr = arr.map((v, i) => {
+        if (left <= 0) return 0;
+        if (v > left) { const t = left; left = 0; return t; }
+        left -= v; return v;
+      });
+    }
+    setRenColors(arr);
+    setRenManual(true);
+  };
+
+  // 智能匹配按钮
+  const handleRenAutoMatch = () => {
+    setRenManual(false);
+  };
 
   // 价格计算
   function getBeadPrice(size: number, color: string) {
@@ -178,42 +209,45 @@ const BraceletCustomizer: React.FC = () => {
     FIVE_COLORS.forEach((c, i) => {
       price += getBeadPrice(sizes.sky, c.name) * skyColors[i];
       price += getBeadPrice(sizes.earth, c.name) * earthColors[i];
-      price += getBeadPrice(sizes.art, c.name) * artColors[i];
+      price += getBeadPrice(renBeadSize, c.name) * renColors[i];
     });
     if (engraving) price += 75;
     return price;
-  }, [mainBead, sizes, skyColors, earthColors, artColors, grade, engraving]);
+  }, [mainBead, sizes, skyColors, earthColors, renColors, grade, engraving, renBeadSize]);
 
   // 珠子总数
-  const totalBeads = 1 + skyTotal + earthTotal + artTotal;
+  const totalBeads = 1 + skyTotal + earthTotal + renTotal;
 
   // 五色珠子统计
-  const colorStats = FIVE_COLORS.map((c, i) => skyColors[i] + earthColors[i] + artColors[i] + (mainColor === c.name ? 1 : 0));
+  const colorStats = FIVE_COLORS.map((c, i) => skyColors[i] + earthColors[i] + renColors[i] + (mainColor === c.name ? 1 : 0));
 
   // 五色平衡度（最大最小差）
   const maxCount = Math.max(...colorStats);
   const minCount = Math.min(...colorStats);
   const balanceScore = maxCount - minCount;
 
-  // 示意图，主珠后优先排同色珠子
+  // 示意图，主珠在12点，紧跟主珠色所有珠子，然后依次排主珠色下一个五行色的所有珠子，直到五色循环一圈
   const renderBraceletSVG = () => {
-    // 组装所有珠子
     type Bead = { size: number; color: string; isMain?: boolean };
-    const mainColorObj = FIVE_COLORS.find(c => c.name === mainBead.color) || FIVE_COLORS[0];
     const beads: Bead[] = [];
-    beads.push({ size: mainBead.size, color: mainColorObj.color, isMain: true });
-    // 先排主珠同色的天珠、地珠、术珠
-    const idx = FIVE_COLORS.findIndex(c => c.name === mainBead.color);
-    for (let j = 0; j < skyColors[idx]; j++) beads.push({ size: sizes.sky, color: mainColorObj.color });
-    for (let j = 0; j < earthColors[idx]; j++) beads.push({ size: sizes.earth, color: mainColorObj.color });
-    for (let j = 0; j < artColors[idx]; j++) beads.push({ size: sizes.art, color: mainColorObj.color });
-    // 其余颜色顺序不变
-    FIVE_COLORS.forEach((c, i) => {
-      if (i === idx) return;
-      for (let j = 0; j < skyColors[i]; j++) beads.push({ size: sizes.sky, color: c.color });
-      for (let j = 0; j < earthColors[i]; j++) beads.push({ size: sizes.earth, color: c.color });
-      for (let j = 0; j < artColors[i]; j++) beads.push({ size: sizes.art, color: c.color });
-    });
+    // 主珠
+    const mainIdx = FIVE_COLORS.findIndex(c => c.name === mainBead.color);
+    beads.push({ size: mainBead.size, color: FIVE_COLORS[mainIdx]?.color || '#e88f8f', isMain: true });
+    // 统计每种五行色的珠子数量（天珠+地珠+人珠）
+    const colorCounts = FIVE_COLORS.map((c, i) => skyColors[i] + earthColors[i] + renColors[i]);
+    // 按主珠色开始的五行顺序分组排列
+    for (let offset = 0; offset < 5; offset++) {
+      const idx = (mainIdx + offset) % 5;
+      let count = colorCounts[idx];
+      let usedSky = 0, usedEarth = 0, usedRen = 0;
+      for (let j = 0; j < count; j++) {
+        let size = 0;
+        if (usedSky < skyColors[idx]) { size = sizes.sky; usedSky++; }
+        else if (usedEarth < earthColors[idx]) { size = sizes.earth; usedEarth++; }
+        else { size = renBeadSize; usedRen++; }
+        beads.push({ size, color: FIVE_COLORS[idx].color });
+      }
+    }
     // 计算圆心和半径，使珠子不重叠
     const N = beads.length;
     const maxR = Math.max(...beads.map(b => b.size));
@@ -226,7 +260,6 @@ const BraceletCustomizer: React.FC = () => {
           const angle = (2 * Math.PI / N) * i - Math.PI / 2;
           const x = cx + r * Math.cos(angle);
           const y = cy + r * Math.sin(angle);
-          // 主珠刻字颜色
           let textColor = '#222';
           if (b.isMain && mainBead.color === '黑色') textColor = '#fff';
           return (
@@ -242,7 +275,7 @@ const BraceletCustomizer: React.FC = () => {
     );
   };
 
-  // 渲染五行色分配
+  // 渲染五行色分配（天珠/地珠）
   const renderColorInputs = (colors: number[], setColors: (arr: number[]) => void, max: number, label: string) => (
     <div style={{ marginBottom: 8 }}>
       <strong>{label}：</strong>
@@ -272,6 +305,43 @@ const BraceletCustomizer: React.FC = () => {
       </span>
     </div>
   );
+
+  // 渲染五行色分配（人珠）
+  const renderRenColorInputs = (colors: number[], setColors: (arr: number[]) => void, max: number, label: string) => {
+    // 去掉"，自动计算"
+    const labelNoAuto = label.replace(/，自动计算/, '');
+    return (
+      <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}>
+        <strong>{labelNoAuto}：</strong>
+        {FIVE_COLORS.map((c, i) => (
+          <span key={c.name} style={{ marginLeft: 8 }}>
+            {c.name}
+            <input
+              type="number"
+              min={0}
+              max={max}
+              value={colors[i]}
+              onChange={e => {
+                const arr = [...colors];
+                let v = Number(e.target.value);
+                // 限制总和
+                arr[i] = v;
+                handleRenColorChange(arr);
+              }}
+              style={{ width: 40, marginLeft: 2 }}
+            />
+          </span>
+        ))}
+        <span style={{ marginLeft: 8, color: (colors.reduce((a, b) => a + b, 0) !== max) ? 'red' : '#888' }}>
+          共{colors.reduce((a, b) => a + b, 0)}颗 / {max}颗
+        </span>
+        <button onClick={handleRenAutoMatch} style={{ marginLeft: 16, padding: '2px 12px', fontSize: 14, background: renManual ? '#ff9800' : '#eee', color: renManual ? '#fff' : '#333', border: 'none', borderRadius: 4, cursor: 'pointer' }}>
+          智能匹配
+        </button>
+        {renManual && <span style={{ color: '#ff9800', marginLeft: 8 }}>已手动调整，点击可恢复智能分配</span>}
+      </div>
+    );
+  };
 
   // 渲染五色统计条
   const renderBalanceBar = () => {
@@ -377,9 +447,9 @@ const BraceletCustomizer: React.FC = () => {
         {renderColorInputs(skyColors, setSkyColors, maxSky, '天珠（7颗）')}
         {renderColorInputs(earthColors, setEarthColors, maxEarth, '地珠（8颗）')}
         <div style={{ marginBottom: 8 }}>
-          <strong>术珠尺寸：</strong>
+          <strong>人珠尺寸：</strong>
           {gender === '男' ? (
-            <select value={artBeadSize} onChange={e => setArtBeadSize(Number(e.target.value))}>
+            <select value={renBeadSize} onChange={e => setRenBeadSize(Number(e.target.value))}>
               <option value={8}>8mm</option>
               <option value={6}>6mm</option>
             </select>
@@ -387,7 +457,7 @@ const BraceletCustomizer: React.FC = () => {
             <span>6mm</span>
           )}
         </div>
-        {renderColorInputs(artColors, setArtColors, autoArtCount, `术珠（${autoArtCount}颗，自动计算）`)}
+        {renderRenColorInputs(renColors, setRenColors, renCount, `人珠（${renCount}颗）`)}
         <div style={{ marginBottom: 16 }}>
           <label>手链长度：</label>
           <input
