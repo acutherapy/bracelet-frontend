@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { calculateBazi, calculateFiveElementsStats, BirthDateTime } from '../utils/bazi/calculateBazi';
 
 // 五行色
 const FIVE_COLORS = [
@@ -49,20 +50,23 @@ const PRICE_TABLE: Record<string, Record<string, Record<string, number>>> = {
   },
 };
 
-// 时辰及时间段
-const SHICHEN = [
-  { value: '子', label: '子（23:00-0:59）' },
-  { value: '丑', label: '丑（1:00-2:59）' },
-  { value: '寅', label: '寅（3:00-4:59）' },
-  { value: '卯', label: '卯（5:00-6:59）' },
-  { value: '辰', label: '辰（7:00-8:59）' },
-  { value: '巳', label: '巳（9:00-10:59）' },
-  { value: '午', label: '午（11:00-12:59）' },
-  { value: '未', label: '未（13:00-14:59）' },
-  { value: '申', label: '申（15:00-16:59）' },
-  { value: '酉', label: '酉（17:00-18:59）' },
-  { value: '戌', label: '戌（19:00-20:59）' },
-  { value: '亥', label: '亥（21:00-22:59）' },
+// 年、月、日、时辰选项
+const years = Array.from({ length: 201 }, (_, i) => 1900 + i);
+const months = Array.from({ length: 12 }, (_, i) => i + 1);
+const getDaysInMonth = (year: number, month: number) => new Date(year, month, 0).getDate();
+const hours = [
+  { branch: '子', label: '子（23:00-0:59）', value: 23 },
+  { branch: '丑', label: '丑（1:00-2:59）', value: 1 },
+  { branch: '寅', label: '寅（3:00-4:59）', value: 3 },
+  { branch: '卯', label: '卯（5:00-6:59）', value: 5 },
+  { branch: '辰', label: '辰（7:00-8:59）', value: 7 },
+  { branch: '巳', label: '巳（9:00-10:59）', value: 9 },
+  { branch: '午', label: '午（11:00-12:59）', value: 11 },
+  { branch: '未', label: '未（13:00-14:59）', value: 13 },
+  { branch: '申', label: '申（15:00-16:59）', value: 15 },
+  { branch: '酉', label: '酉（17:00-18:59）', value: 17 },
+  { branch: '戌', label: '戌（19:00-20:59）', value: 19 },
+  { branch: '亥', label: '亥（21:00-22:59）', value: 21 }
 ];
 
 const getSizes = (gender: '男' | '女', artBeadSize: number) => {
@@ -360,6 +364,144 @@ const BraceletCustomizer: React.FC = () => {
     );
   };
 
+  // 五行色与五行名映射
+  const wuxingMap: Record<string, string> = {
+    '绿色': '木',
+    '红色': '火',
+    '黄色': '土',
+    '白色': '金',
+    '黑色': '水'
+  };
+
+  // 新增state
+  const [birthYear, setBirthYear] = useState<number>(1990);
+  const [birthMonth, setBirthMonth] = useState<number>(1);
+  const [birthDay, setBirthDay] = useState<number>(1);
+  const [birthHour, setBirthHour] = useState<number>(23);
+
+  // 动态天数
+  const daysInMonth = getDaysInMonth(birthYear, birthMonth);
+
+  // 自动生成天珠（根据客户生日和时辰，主珠与天珠联动）
+  const handleAutoSky = () => {
+    // 校验输入
+    if (!birthYear || !birthMonth || !birthDay || !birthHour) {
+      alert('请先填写生日和时辰');
+      return;
+    }
+
+    // 直接使用状态中的值，避免解析错误
+    const birth: BirthDateTime = { 
+      year: birthYear, 
+      month: birthMonth, 
+      day: birthDay, 
+      hour: birthHour 
+    };
+
+    // 计算八字
+    const bazi = calculateBazi(birth);
+    const stats = calculateFiveElementsStats(bazi);
+
+    // 日志：调试八字分布
+    console.log('【八字调试】输入：', birth, '四柱:', bazi.year, bazi.month, bazi.day, bazi.hour, '五行分布:', stats);
+
+    // 1. 统计五行分布（8颗）
+    let arr = FIVE_COLORS.map(c => {
+      const wuxing = wuxingMap[c.name];
+      return stats.find(s => s.element === wuxing)?.count || 0;
+    });
+
+    // 2. 主珠占用最多的五行
+    const maxCount = Math.max(...arr);
+    const mainIdx = arr.findIndex(v => v === maxCount);
+    const mainColorName = FIVE_COLORS[mainIdx].name;
+    
+    // 3. 从最多的五行中减去1颗作为主珠
+    arr[mainIdx] = Math.max(0, arr[mainIdx] - 1);
+
+    // 4. 补齐到7颗，使用五行相生相克关系优化分配
+    let sum = arr.reduce((a, b) => a + b, 0);
+    
+    // 五行相生关系：木生火，火生土，土生金，金生水，水生木
+    const wuxingSheng = {
+      '木': '火',
+      '火': '土',
+      '土': '金',
+      '金': '水',
+      '水': '木'
+    };
+
+    while (sum < 7) {
+      // 找到当前最大项
+      const maxIdx = arr.indexOf(Math.max(...arr));
+      const maxWuxing = wuxingMap[FIVE_COLORS[maxIdx].name];
+      
+      // 优先补充相生的五行
+      const shengWuxing = wuxingSheng[maxWuxing as keyof typeof wuxingSheng];
+      const shengIdx = FIVE_COLORS.findIndex(c => wuxingMap[c.name] === shengWuxing);
+      
+      if (shengIdx >= 0) {
+        arr[shengIdx]++;
+      } else {
+        arr[maxIdx]++;
+      }
+      
+      sum = arr.reduce((a, b) => a + b, 0);
+    }
+
+    // 5. 如果超过7颗，从最多的开始减
+    while (sum > 7) {
+      const maxIdx = arr.indexOf(Math.max(...arr));
+      arr[maxIdx]--;
+      sum = arr.reduce((a, b) => a + b, 0);
+    }
+
+    // 6. 更新状态
+    setMainColor(mainColorName);
+    setSkyColors(arr);
+    
+    console.log('【自动天珠-主珠联动】bazi:', bazi, 'stats:', stats, 'arr:', arr, 'mainColor:', mainColorName);
+  };
+
+  // 自动生成地珠（用当前时间）
+  const handleAutoEarth = () => {
+    const now = new Date();
+    const hour = now.getHours();
+    
+    // 使用与天珠相同的时辰映射逻辑
+    const birth: BirthDateTime = { 
+      year: now.getFullYear(), 
+      month: now.getMonth() + 1, 
+      day: now.getDate(), 
+      hour 
+    };
+    
+    const bazi = calculateBazi(birth);
+    const stats = calculateFiveElementsStats(bazi);
+    
+    // 使用与天珠相同的分配逻辑
+    let arr = FIVE_COLORS.map(c => {
+      const wuxing = wuxingMap[c.name];
+      return stats.find(s => s.element === wuxing)?.count || 0;
+    });
+    
+    // 补齐到8颗
+    let sum = arr.reduce((a, b) => a + b, 0);
+    while (sum < 8) {
+      const maxIdx = arr.indexOf(Math.max(...arr));
+      arr[maxIdx]++;
+      sum = arr.reduce((a, b) => a + b, 0);
+    }
+    while (sum > 8) {
+      const maxIdx = arr.indexOf(Math.max(...arr));
+      arr[maxIdx]--;
+      sum = arr.reduce((a, b) => a + b, 0);
+    }
+    
+    console.log('【自动地珠】bazi:', bazi, 'stats:', stats, 'arr:', arr);
+    setEarthColors(arr);
+  };
+
   return (
     <div style={{ maxWidth: 700, margin: '0 auto', padding: 24 }}>
       {/* 打印区域开始 */}
@@ -381,16 +523,29 @@ const BraceletCustomizer: React.FC = () => {
             </div>
             <div style={{ flex: '1 1 200px' }}>
               <label>生日：</label>
-              <span className="print-hide"><input type="date" value={customer.birthday} onChange={e => setCustomer({ ...customer, birthday: e.target.value })} style={{ width: '100%' }} /></span>
-              <span className="print-only">{customer.birthday}</span>
+              <span className="print-hide">
+                <select value={birthYear} onChange={e => setBirthYear(Number(e.target.value))} style={{ width: 80, marginRight: 4 }}>
+                  {years.map(y => <option key={y} value={y}>{y}年</option>)}
+                </select>
+                <select value={birthMonth} onChange={e => setBirthMonth(Number(e.target.value))} style={{ width: 60, marginRight: 4 }}>
+                  {months.map(m => <option key={m} value={m}>{m}月</option>)}
+                </select>
+                <select value={birthDay} onChange={e => setBirthDay(Number(e.target.value))} style={{ width: 60, marginRight: 4 }}>
+                  {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}日</option>)}
+                </select>
+                <select value={birthHour} onChange={e => setBirthHour(Number(e.target.value))} style={{ width: 120 }}>
+                  {hours.map(h => <option key={h.value} value={h.value}>{h.label}</option>)}
+                </select>
+              </span>
+              <span className="print-only">{birthYear}-{birthMonth}-{birthDay} {hours.find(h=>h.value===birthHour)?.label||''}</span>
             </div>
             <div style={{ flex: '1 1 200px' }}>
               <label>时辰：</label>
               <span className="print-hide"><select value={customer.shichen} onChange={e => setCustomer({ ...customer, shichen: e.target.value })} style={{ width: '100%' }}>
                 <option value="">请选择</option>
-                {SHICHEN.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                {hours.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
               </select></span>
-              <span className="print-only">{SHICHEN.find(s=>s.value===customer.shichen)?.label||''}</span>
+              <span className="print-only">{hours.find(s=>String(s.value)===String(customer.shichen))?.label||''}</span>
             </div>
             <div style={{ flex: '1 1 200px' }}>
               <label>电子邮件：</label>
@@ -423,6 +578,18 @@ const BraceletCustomizer: React.FC = () => {
               <span className="print-only">{customer.zipcode}</span>
             </div>
           </div>
+          {/* 打印时显示性别、品级、五色珠子数目 */}
+          <div className="print-only" style={{ marginTop: 16, fontSize: 16 }}>
+            <div><strong>性别：</strong>{gender}</div>
+            <div><strong>品级：</strong>{grade}</div>
+            <div><strong>五色珠子数目：</strong>
+              {FIVE_COLORS.map((c, i) => (
+                <span key={c.name} style={{ marginRight: 12, color: c.color }}>
+                  {c.name}{skyColors[i] + earthColors[i] + renColors[i] + (mainColor === c.name ? 1 : 0)}颗
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
         <div style={{ marginBottom: 16 }}>
           <label>选择性别：</label>
@@ -443,6 +610,11 @@ const BraceletCustomizer: React.FC = () => {
             {MAIN_COLORS.map(opt => <option key={opt.name} value={opt.name}>{opt.name}</option>)}
           </select>
           <span style={{ color: '#888', marginLeft: 8 }}>(自动跟随天珠最多颜色)</span>
+        </div>
+        {/* 天珠/地珠分配区上方插入自动生成按钮 */}
+        <div style={{ marginBottom: 8 }}>
+          <button onClick={handleAutoSky} style={{ marginRight: 12, padding: '2px 12px', borderRadius: 4, border: '1px solid #aaa', background: '#f5f5f5', cursor: 'pointer' }}>根据生辰自动生成天珠</button>
+          <button onClick={handleAutoEarth} style={{ padding: '2px 12px', borderRadius: 4, border: '1px solid #aaa', background: '#f5f5f5', cursor: 'pointer' }}>用当前时间自动生成地珠</button>
         </div>
         {renderColorInputs(skyColors, setSkyColors, maxSky, '天珠（7颗）')}
         {renderColorInputs(earthColors, setEarthColors, maxEarth, '地珠（8颗）')}
