@@ -136,9 +136,7 @@ const BraceletCustomizer: React.FC = () => {
 
   // 天珠最多的颜色自动设为主珠颜色
   React.useEffect(() => {
-    const maxSkyCount = Math.max(...skyColors);
-    const idx = skyColors.findIndex(c => c === maxSkyCount);
-    if (maxSkyCount > 0) setMainColor(FIVE_COLORS[idx].name);
+    // 不再自动跟随天珠颜色，主珠颜色只由handleAutoSky设定
   }, [skyColors]);
 
   // 主珠
@@ -402,27 +400,22 @@ const BraceletCustomizer: React.FC = () => {
     const bazi = calculateBazi(birth);
     const stats = calculateFiveElementsStats(bazi);
 
-    // 日志：调试八字分布
-    console.log('【八字调试】输入：', birth, '四柱:', bazi.year, bazi.month, bazi.day, bazi.hour, '五行分布:', stats);
-
     // 1. 统计五行分布（8颗）
     let arr = FIVE_COLORS.map(c => {
       const wuxing = wuxingMap[c.name];
       return stats.find(s => s.element === wuxing)?.count || 0;
     });
 
-    // 2. 主珠占用最多的五行
+    // 2. 主珠占用最多的五行（如有并列取第一个）
     const maxCount = Math.max(...arr);
     const mainIdx = arr.findIndex(v => v === maxCount);
     const mainColorName = FIVE_COLORS[mainIdx].name;
-    
-    // 3. 从最多的五行中减去1颗作为主珠
+
+    // 3. 主珠直接设为该色，并从该五行数量中减去1
     arr[mainIdx] = Math.max(0, arr[mainIdx] - 1);
 
     // 4. 补齐到7颗，使用五行相生相克关系优化分配
     let sum = arr.reduce((a, b) => a + b, 0);
-    
-    // 五行相生关系：木生火，火生土，土生金，金生水，水生木
     const wuxingSheng = {
       '木': '火',
       '火': '土',
@@ -430,36 +423,27 @@ const BraceletCustomizer: React.FC = () => {
       '金': '水',
       '水': '木'
     };
-
     while (sum < 7) {
-      // 找到当前最大项
       const maxIdx = arr.indexOf(Math.max(...arr));
       const maxWuxing = wuxingMap[FIVE_COLORS[maxIdx].name];
-      
-      // 优先补充相生的五行
       const shengWuxing = wuxingSheng[maxWuxing as keyof typeof wuxingSheng];
       const shengIdx = FIVE_COLORS.findIndex(c => wuxingMap[c.name] === shengWuxing);
-      
       if (shengIdx >= 0) {
         arr[shengIdx]++;
       } else {
         arr[maxIdx]++;
       }
-      
       sum = arr.reduce((a, b) => a + b, 0);
     }
-
-    // 5. 如果超过7颗，从最多的开始减
     while (sum > 7) {
       const maxIdx = arr.indexOf(Math.max(...arr));
       arr[maxIdx]--;
       sum = arr.reduce((a, b) => a + b, 0);
     }
 
-    // 6. 更新状态
+    // 5. 更新状态，主珠颜色直接设为mainColorName，不再跟随天珠
     setMainColor(mainColorName);
     setSkyColors(arr);
-    
     console.log('【自动天珠-主珠联动】bazi:', bazi, 'stats:', stats, 'arr:', arr, 'mainColor:', mainColorName);
   };
 
@@ -538,14 +522,6 @@ const BraceletCustomizer: React.FC = () => {
                 </select>
               </span>
               <span className="print-only">{birthYear}-{birthMonth}-{birthDay} {hours.find(h=>h.value===birthHour)?.label||''}</span>
-            </div>
-            <div style={{ flex: '1 1 200px' }}>
-              <label>时辰：</label>
-              <span className="print-hide"><select value={customer.shichen} onChange={e => setCustomer({ ...customer, shichen: e.target.value })} style={{ width: '100%' }}>
-                <option value="">请选择</option>
-                {hours.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-              </select></span>
-              <span className="print-only">{hours.find(s=>String(s.value)===String(customer.shichen))?.label||''}</span>
             </div>
             <div style={{ flex: '1 1 200px' }}>
               <label>电子邮件：</label>
@@ -707,7 +683,6 @@ const BraceletCustomizer: React.FC = () => {
           #print-area { position: absolute; left: 0; top: 0; width: 100vw; background: white; z-index: 9999; }
           .print-hide { display: none !important; }
           .print-only { display: inline !important; }
-          button, input, select, textarea { display: none !important; }
         }
         .print-only { display: none; }
       `}</style>
