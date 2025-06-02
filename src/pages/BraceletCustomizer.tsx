@@ -447,29 +447,38 @@ const BraceletCustomizer: React.FC = () => {
     console.log('【自动天珠-主珠联动】bazi:', bazi, 'stats:', stats, 'arr:', arr, 'mainColor:', mainColorName);
   };
 
-  // 自动生成地珠（用当前时间）
-  const handleAutoEarth = () => {
+  // 新增state
+  const [earthYear, setEarthYear] = useState<number>(new Date().getFullYear());
+  const [earthMonth, setEarthMonth] = useState<number>(new Date().getMonth() + 1);
+  const [earthDay, setEarthDay] = useState<number>(new Date().getDate());
+  const [earthHour, setEarthHour] = useState<number>(() => {
     const now = new Date();
     const hour = now.getHours();
-    
-    // 使用与天珠相同的时辰映射逻辑
-    const birth: BirthDateTime = { 
-      year: now.getFullYear(), 
-      month: now.getMonth() + 1, 
-      day: now.getDate(), 
-      hour 
+    // 匹配最近的时辰
+    let closest = hours[0].value;
+    let minDiff = Math.abs(hour - hours[0].value);
+    for (let h of hours) {
+      const diff = Math.abs(hour - h.value);
+      if (diff < minDiff) { minDiff = diff; closest = h.value; }
+    }
+    return closest;
+  });
+  const earthDaysInMonth = getDaysInMonth(earthYear, earthMonth);
+
+  // 修改handleAutoEarth，使用earthYear, earthMonth, earthDay, earthHour
+  const handleAutoEarth = () => {
+    const birth: BirthDateTime = {
+      year: earthYear,
+      month: earthMonth,
+      day: earthDay,
+      hour: earthHour
     };
-    
     const bazi = calculateBazi(birth);
     const stats = calculateFiveElementsStats(bazi);
-    
-    // 使用与天珠相同的分配逻辑
     let arr = FIVE_COLORS.map(c => {
       const wuxing = wuxingMap[c.name];
       return stats.find(s => s.element === wuxing)?.count || 0;
     });
-    
-    // 补齐到8颗
     let sum = arr.reduce((a, b) => a + b, 0);
     while (sum < 8) {
       const maxIdx = arr.indexOf(Math.max(...arr));
@@ -481,7 +490,6 @@ const BraceletCustomizer: React.FC = () => {
       arr[maxIdx]--;
       sum = arr.reduce((a, b) => a + b, 0);
     }
-    
     console.log('【自动地珠】bazi:', bazi, 'stats:', stats, 'arr:', arr);
     setEarthColors(arr);
   };
@@ -590,7 +598,22 @@ const BraceletCustomizer: React.FC = () => {
         {/* 天珠/地珠分配区上方插入自动生成按钮 */}
         <div style={{ marginBottom: 8 }}>
           <button onClick={handleAutoSky} style={{ marginRight: 12, padding: '2px 12px', borderRadius: 4, border: '1px solid #aaa', background: '#f5f5f5', cursor: 'pointer' }}>根据生辰自动生成天珠</button>
-          <button onClick={handleAutoEarth} style={{ padding: '2px 12px', borderRadius: 4, border: '1px solid #aaa', background: '#f5f5f5', cursor: 'pointer' }}>用当前时间自动生成地珠</button>
+          {/* 地珠时间输入控件 */}
+          <span style={{ marginRight: 8 }}>
+            <select value={earthYear} onChange={e => setEarthYear(Number(e.target.value))} style={{ width: 80, marginRight: 4 }}>
+              {years.map(y => <option key={y} value={y}>{y}年</option>)}
+            </select>
+            <select value={earthMonth} onChange={e => setEarthMonth(Number(e.target.value))} style={{ width: 60, marginRight: 4 }}>
+              {months.map(m => <option key={m} value={m}>{m}月</option>)}
+            </select>
+            <select value={earthDay} onChange={e => setEarthDay(Number(e.target.value))} style={{ width: 60, marginRight: 4 }}>
+              {Array.from({ length: earthDaysInMonth }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}日</option>)}
+            </select>
+            <select value={earthHour} onChange={e => setEarthHour(Number(e.target.value))} style={{ width: 120 }}>
+              {hours.map(h => <option key={h.value} value={h.value}>{h.label}</option>)}
+            </select>
+          </span>
+          <button onClick={handleAutoEarth} style={{ padding: '2px 12px', borderRadius: 4, border: '1px solid #aaa', background: '#f5f5f5', cursor: 'pointer' }}>用所选时间自动生成地珠</button>
         </div>
         {renderColorInputs(skyColors, setSkyColors, maxSky, '天珠（7颗）')}
         {renderColorInputs(earthColors, setEarthColors, maxEarth, '地珠（8颗）')}
