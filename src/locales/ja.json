@@ -1,0 +1,81 @@
+{
+  "title": "和合珠（Hehe Beads）カスタマイズ",
+  "customerInfo": "顧客情報",
+  "name": "名前",
+  "phone": "電話",
+  "birthday": "誕生日",
+  "email": "メール",
+  "wechat": "WeChat",
+  "address": "住所",
+  "city": "市",
+  "province": "都道府県",
+  "zipcode": "郵便番号",
+  "gender": {
+    "male": "男性",
+    "female": "女性"
+  },
+  "grade": {
+    "high": "上級",
+    "mid": "中級",
+    "low": "下級"
+  },
+  "gradeMaterial": {
+    "high": "クリスタル",
+    "mid": "翡翠、メノウ",
+    "low": "ガラスまたはその他"
+  },
+  "mainColor": "メインビーズの色",
+  "autoSky": "生年月日で天珠自動生成",
+  "autoEarth": "選択した時間で地珠自動生成",
+  "skyBeads": "天珠（7個）",
+  "earthBeads": "地珠（8個）",
+  "renBeads": "人珠",
+  "braceletLength": "ブレスレットの長さ",
+  "engraving": "メインビーズ刻印（+ $75）",
+  "totalPrice": "合計金額",
+  "print": "印刷/保存PDF",
+  "balance": "五色バランス",
+  "stat": "五色ビーズ統計",
+  "structure": "ブレスレット構造図",
+  "autoMatch": "自動マッチング",
+  "inputHint": "漢字1文字または英字2文字",
+  "color": {
+    "green": "緑色",
+    "red": "赤色",
+    "yellow": "黄色",
+    "white": "白色",
+    "black": "黒色"
+  },
+  "unit": {
+    "piece": "個",
+    "mm": "mm",
+    "cm": "cm",
+    "inch": "インチ"
+  },
+  "balanceLevel": {
+    "perfect": "最適",
+    "good": "良好",
+    "normal": "普通",
+    "bad": "アンバランス"
+  },
+  "time": {
+    "year": "{{year}}年",
+    "month": "{{month}}月",
+    "day": "{{day}}日"
+  },
+  "hourLabel": "{{label}}",
+  "beadSize": {
+    "8mm": "8mm",
+    "6mm": "6mm"
+  },
+  "beadSummary": "合計{{count}}{{unit}} / {{total}}{{unit}}",
+  "totalBeads": "ビーズ総数：{{count}}{{unit}}",
+  "braceletLengthLabel": "ブレスレットの長さ：{{length}} {{unit}}",
+  "engravingError": {
+    "en": "英字2文字のみ入力可能",
+    "zh": "漢字1文字のみ入力可能"
+  },
+  "manualMatch": "手動調整済み、クリックで自動マッチに戻す",
+  "genderLabel": "性別",
+  "gradeLabel": "グレード"
+} 

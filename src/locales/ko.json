@@ -1,0 +1,81 @@
+{
+  "title": "화합주(Hehe Beads) 맞춤 제작",
+  "customerInfo": "고객 정보",
+  "name": "이름",
+  "phone": "전화번호",
+  "birthday": "생년월일",
+  "email": "이메일",
+  "wechat": "위챗",
+  "address": "주소",
+  "city": "도시",
+  "province": "도",
+  "zipcode": "우편번호",
+  "gender": {
+    "male": "남성",
+    "female": "여성"
+  },
+  "grade": {
+    "high": "상급",
+    "mid": "중급",
+    "low": "하급"
+  },
+  "gradeMaterial": {
+    "high": "크리스탈",
+    "mid": "비취, 마노",
+    "low": "유리 또는 기타"
+  },
+  "mainColor": "메인 구슬 색상",
+  "autoSky": "생년월일로 천주 자동 생성",
+  "autoEarth": "선택한 시간으로 지주 자동 생성",
+  "skyBeads": "천주(7개)",
+  "earthBeads": "지주(8개)",
+  "renBeads": "인주",
+  "braceletLength": "팔찌 길이",
+  "engraving": "메인 구슬 각인 (+ $75)",
+  "totalPrice": "총 가격",
+  "print": "인쇄/PDF 저장",
+  "balance": "오색 균형도",
+  "stat": "오색 구슬 통계",
+  "structure": "팔찌 구조도",
+  "autoMatch": "자동 매칭",
+  "inputHint": "한글 1자 또는 영문 2자",
+  "color": {
+    "green": "초록색",
+    "red": "빨간색",
+    "yellow": "노란색",
+    "white": "흰색",
+    "black": "검정색"
+  },
+  "unit": {
+    "piece": "개",
+    "mm": "mm",
+    "cm": "cm",
+    "inch": "인치"
+  },
+  "balanceLevel": {
+    "perfect": "최적",
+    "good": "좋음",
+    "normal": "보통",
+    "bad": "불균형"
+  },
+  "time": {
+    "year": "{{year}}년",
+    "month": "{{month}}월",
+    "day": "{{day}}일"
+  },
+  "hourLabel": "{{label}}",
+  "beadSize": {
+    "8mm": "8mm",
+    "6mm": "6mm"
+  },
+  "beadSummary": "총{{count}}{{unit}} / {{total}}{{unit}}",
+  "totalBeads": "구슬 총수: {{count}}{{unit}}",
+  "braceletLengthLabel": "팔찌 길이: {{length}} {{unit}}",
+  "engravingError": {
+    "en": "영문 2자만 입력 가능",
+    "zh": "한글 1자만 입력 가능"
+  },
+  "manualMatch": "수동 조정됨, 클릭 시 자동 매칭 복원",
+  "genderLabel": "성별",
+  "gradeLabel": "등급"
+} 

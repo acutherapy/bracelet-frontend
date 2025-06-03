@@ -1,0 +1,81 @@
+{
+  "title": "Hehe Beads Anpassung",
+  "customerInfo": "Kundeninformation",
+  "name": "Name",
+  "phone": "Telefon",
+  "birthday": "Geburtsdatum",
+  "email": "E-Mail",
+  "wechat": "WeChat",
+  "address": "Adresse",
+  "city": "Stadt",
+  "province": "Bundesland",
+  "zipcode": "Postleitzahl",
+  "gender": {
+    "male": "Männlich",
+    "female": "Weiblich"
+  },
+  "grade": {
+    "high": "Hoch",
+    "mid": "Mittel",
+    "low": "Niedrig"
+  },
+  "gradeMaterial": {
+    "high": "Kristall",
+    "mid": "Jade, Achat",
+    "low": "Glas oder andere"
+  },
+  "mainColor": "Hauptperlenfarbe",
+  "autoSky": "Himmel-Perlen nach Geburtsdatum generieren",
+  "autoEarth": "Erde-Perlen nach gewählter Zeit generieren",
+  "skyBeads": "Himmel-Perlen (7)",
+  "earthBeads": "Erde-Perlen (8)",
+  "renBeads": "Ren-Perlen",
+  "braceletLength": "Armbandlänge",
+  "engraving": "Hauptperle Gravur (+ $75)",
+  "totalPrice": "Gesamtpreis",
+  "print": "Drucken/PDF speichern",
+  "balance": "Farb-Balance",
+  "stat": "Farbperlen-Statistik",
+  "structure": "Armband-Strukturdiagramm",
+  "autoMatch": "Automatische Zuordnung",
+  "inputHint": "1 chinesisches Zeichen oder 2 englische Buchstaben",
+  "color": {
+    "green": "Grün",
+    "red": "Rot",
+    "yellow": "Gelb",
+    "white": "Weiß",
+    "black": "Schwarz"
+  },
+  "unit": {
+    "piece": "Stück",
+    "mm": "mm",
+    "cm": "cm",
+    "inch": "Zoll"
+  },
+  "balanceLevel": {
+    "perfect": "Perfekt",
+    "good": "Gut",
+    "normal": "Normal",
+    "bad": "Unausgeglichen"
+  },
+  "time": {
+    "year": "{{year}} Jahr",
+    "month": "{{month}} Monat",
+    "day": "{{day}} Tag"
+  },
+  "hourLabel": "{{label}}",
+  "beadSize": {
+    "8mm": "8mm",
+    "6mm": "6mm"
+  },
+  "beadSummary": "Insgesamt {{count}}{{unit}} / {{total}}{{unit}}",
+  "totalBeads": "Gesamtanzahl Perlen: {{count}}{{unit}}",
+  "braceletLengthLabel": "Armbandlänge: {{length}} {{unit}}",
+  "engravingError": {
+    "en": "Nur 2 englische Buchstaben erlaubt",
+    "zh": "Nur 1 chinesisches Zeichen erlaubt"
+  },
+  "manualMatch": "Manuell angepasst, zum Wiederherstellen der automatischen Zuordnung klicken",
+  "genderLabel": "Geschlecht",
+  "gradeLabel": "Qualität"
+} 

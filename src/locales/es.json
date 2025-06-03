@@ -1,0 +1,81 @@
+{
+  "title": "Hehe Beads Personalización",
+  "customerInfo": "Información del Cliente",
+  "name": "Nombre",
+  "phone": "Teléfono",
+  "birthday": "Fecha de Nacimiento",
+  "email": "Correo Electrónico",
+  "wechat": "WeChat",
+  "address": "Dirección",
+  "city": "Ciudad",
+  "province": "Provincia",
+  "zipcode": "Código Postal",
+  "gender": {
+    "male": "Hombre",
+    "female": "Mujer"
+  },
+  "grade": {
+    "high": "Alta",
+    "mid": "Media",
+    "low": "Baja"
+  },
+  "gradeMaterial": {
+    "high": "Cristal",
+    "mid": "Jade, Ágata",
+    "low": "Vidrio u otros"
+  },
+  "mainColor": "Color de la Cuenta Principal",
+  "autoSky": "Generar Cuentas Celestes por Fecha de Nacimiento",
+  "autoEarth": "Generar Cuentas Terrestres por Hora Seleccionada",
+  "skyBeads": "Cuentas Celestes (7)",
+  "earthBeads": "Cuentas Terrestres (8)",
+  "renBeads": "Cuentas Ren",
+  "braceletLength": "Longitud de la Pulsera",
+  "engraving": "Grabado en Cuenta Principal (+ $75)",
+  "totalPrice": "Precio Total",
+  "print": "Imprimir/Guardar PDF",
+  "balance": "Balance de Colores",
+  "stat": "Estadísticas de Cuentas de Colores",
+  "structure": "Diagrama de la Pulsera",
+  "autoMatch": "Emparejamiento Automático",
+  "inputHint": "1 carácter chino o 2 letras en inglés",
+  "color": {
+    "green": "Verde",
+    "red": "Rojo",
+    "yellow": "Amarillo",
+    "white": "Blanco",
+    "black": "Negro"
+  },
+  "unit": {
+    "piece": "pieza",
+    "mm": "mm",
+    "cm": "cm",
+    "inch": "pulgada"
+  },
+  "balanceLevel": {
+    "perfect": "Perfecto",
+    "good": "Bueno",
+    "normal": "Normal",
+    "bad": "Desequilibrado"
+  },
+  "time": {
+    "year": "{{year}} Año",
+    "month": "{{month}} Mes",
+    "day": "{{day}} Día"
+  },
+  "hourLabel": "{{label}}",
+  "beadSize": {
+    "8mm": "8mm",
+    "6mm": "6mm"
+  },
+  "beadSummary": "Total {{count}}{{unit}} / {{total}}{{unit}}",
+  "totalBeads": "Total de cuentas: {{count}}{{unit}}",
+  "braceletLengthLabel": "Longitud de la pulsera: {{length}} {{unit}}",
+  "engravingError": {
+    "en": "Solo se permiten 2 letras en inglés",
+    "zh": "Solo se permite 1 carácter chino"
+  },
+  "manualMatch": "Ajustado manualmente, haz clic para restaurar el emparejamiento automático",
+  "genderLabel": "Género",
+  "gradeLabel": "Calidad"
+} 

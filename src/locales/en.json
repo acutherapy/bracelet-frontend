@@ -1,0 +1,81 @@
+{
+  "title": "Hehe Beads Customization",
+  "customerInfo": "Customer Info",
+  "name": "Name",
+  "phone": "Phone",
+  "birthday": "Birthday",
+  "email": "Email",
+  "wechat": "WeChat",
+  "address": "Address",
+  "city": "City",
+  "province": "Province",
+  "zipcode": "Zip Code",
+  "gender": {
+    "male": "Male",
+    "female": "Female"
+  },
+  "grade": {
+    "high": "High",
+    "mid": "Medium",
+    "low": "Low"
+  },
+  "gradeMaterial": {
+    "high": "Crystal",
+    "mid": "Jade, Agate",
+    "low": "Glass or Others"
+  },
+  "mainColor": "Main Bead Color",
+  "autoSky": "Auto-generate Sky Beads by Birthday",
+  "autoEarth": "Auto-generate Earth Beads by Selected Time",
+  "skyBeads": "Sky Beads (7)",
+  "earthBeads": "Earth Beads (8)",
+  "renBeads": "Ren Beads",
+  "braceletLength": "Bracelet Length",
+  "engraving": "Main Bead Engraving (+ $75)",
+  "totalPrice": "Total Price",
+  "print": "Print/Save PDF",
+  "balance": "Color Balance",
+  "stat": "Color Bead Stats",
+  "structure": "Bracelet Structure Diagram",
+  "autoMatch": "Auto Match",
+  "inputHint": "1 Chinese or 2 English letters",
+  "color": {
+    "green": "Green",
+    "red": "Red",
+    "yellow": "Yellow",
+    "white": "White",
+    "black": "Black"
+  },
+  "unit": {
+    "piece": "piece",
+    "mm": "mm",
+    "cm": "cm",
+    "inch": "inch"
+  },
+  "balanceLevel": {
+    "perfect": "Perfect",
+    "good": "Good",
+    "normal": "Normal",
+    "bad": "Unbalanced"
+  },
+  "time": {
+    "year": "{{year}} Year",
+    "month": "{{month}} Month",
+    "day": "{{day}} Day"
+  },
+  "hourLabel": "{{label}}",
+  "beadSize": {
+    "8mm": "8mm",
+    "6mm": "6mm"
+  },
+  "beadSummary": "Total {{count}}{{unit}} / {{total}}{{unit}}",
+  "totalBeads": "Total Beads: {{count}}{{unit}}",
+  "braceletLengthLabel": "Bracelet Length: {{length}} {{unit}}",
+  "engravingError": {
+    "en": "Only 2 English letters allowed",
+    "zh": "Only 1 Chinese character allowed"
+  },
+  "manualMatch": "Manually adjusted, click to restore auto match",
+  "genderLabel": "Gender",
+  "gradeLabel": "Grade"
+} 

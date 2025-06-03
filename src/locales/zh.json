@@ -1,0 +1,81 @@
+{
+  "title": "和合珠（Hehe Beads）定制",
+  "customerInfo": "客户信息",
+  "name": "名字",
+  "phone": "电话",
+  "birthday": "生日",
+  "email": "电子邮件",
+  "wechat": "微信",
+  "address": "通信地址",
+  "city": "城市",
+  "province": "省",
+  "zipcode": "邮编",
+  "gender": {
+    "male": "男",
+    "female": "女"
+  },
+  "grade": {
+    "high": "上品",
+    "mid": "中品",
+    "low": "下品"
+  },
+  "gradeMaterial": {
+    "high": "水晶",
+    "mid": "玉石、玛瑙",
+    "low": "玻璃或其它"
+  },
+  "mainColor": "主珠颜色",
+  "autoSky": "根据生辰自动生成天珠",
+  "autoEarth": "用所选时间自动生成地珠",
+  "skyBeads": "天珠（7颗）",
+  "earthBeads": "地珠（8颗）",
+  "renBeads": "人珠",
+  "braceletLength": "手链长度",
+  "engraving": "主珠刻字（+ $75）",
+  "totalPrice": "合计价格",
+  "print": "打印/保存PDF",
+  "balance": "五色平衡度",
+  "stat": "五色珠子统计",
+  "structure": "手链结构示意图",
+  "autoMatch": "智能匹配",
+  "inputHint": "1汉字或2英文字母",
+  "color": {
+    "green": "绿色",
+    "red": "红色",
+    "yellow": "黄色",
+    "white": "白色",
+    "black": "黑色"
+  },
+  "unit": {
+    "piece": "颗",
+    "mm": "毫米",
+    "cm": "厘米",
+    "inch": "英寸"
+  },
+  "balanceLevel": {
+    "perfect": "极佳",
+    "good": "良好",
+    "normal": "一般",
+    "bad": "失衡"
+  },
+  "time": {
+    "year": "{{year}}年",
+    "month": "{{month}}月",
+    "day": "{{day}}日"
+  },
+  "hourLabel": "{{label}}",
+  "beadSize": {
+    "8mm": "8毫米",
+    "6mm": "6毫米"
+  },
+  "beadSummary": "共{{count}}{{unit}} / {{total}}{{unit}}",
+  "totalBeads": "珠子总数：{{count}}{{unit}}",
+  "braceletLengthLabel": "手链长度：{{length}} {{unit}}",
+  "engravingError": {
+    "en": "只能输入2个英文字母",
+    "zh": "只能输入1个汉字"
+  },
+  "manualMatch": "已手动调整，点击可恢复智能分配",
+  "genderLabel": "性别",
+  "gradeLabel": "品级"
+} 
