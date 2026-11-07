@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { calculateBazi, calculateFiveElementsStats, BirthDateTime } from '../utils/bazi/calculateBazi';
 import { useTranslation } from 'react-i18next';
+import './BraceletCustomizer.css';
 
 // 品级
 const GRADES = [
@@ -186,8 +187,10 @@ const BraceletCustomizer: React.FC = () => {
       renArr[minIdx]++;
       stats[minIdx]++;
     }
-    setRenColors(renArr);
-  }, [mainColor, skyColors, earthColors, userLengthMM, sizes, mainBead.size, renBeadSize, renManual, renCount]);
+    // D1 修复：结果相同则不更新，避免无意义的重渲染
+    setRenColors(prev => (prev.length === renArr.length && prev.every((v, i) => v === renArr[i]) ? prev : renArr));
+    // D1 修复：原依赖含每次渲染新建的 sizes 对象，导致每次渲染都重新分配并覆盖用户第一次手动修改；改为依赖其中的数值
+  }, [mainColor, skyColors, earthColors, userLengthMM, sizes.sky, sizes.earth, mainBead.size, renBeadSize, renManual, renCount]);
 
   // 人珠手动调整（总和不能超过renCount）
   const handleRenColorChange = (arr: number[]) => {
@@ -266,7 +269,7 @@ const BraceletCustomizer: React.FC = () => {
     const r = sumD / (2 * Math.PI) + maxR + 8;
     const cx = 180, cy = 110;
     return (
-      <svg width={360} height={220} style={{ background: '#fafafa' }}>
+      <svg viewBox="0 0 360 220" className="bc-svg" data-testid="svg" role="img" aria-label={t('structure')}>
         {beads.map((b, i) => {
           const angle = (2 * Math.PI / N) * i - Math.PI / 2;
           const x = cx + r * Math.cos(angle);
@@ -286,19 +289,35 @@ const BraceletCustomizer: React.FC = () => {
     );
   };
 
+  // ===== 显示层辅助（只读上方原有值，不参与计算） =====
+  const isCJK = /^(zh|ja|ko)/.test(i18n.resolvedLanguage || i18n.language || 'zh');
+  const beadsN = (n: number) => t('beadsN', { count: n });
+  const joinWord = (a: string, b: string) => (isCJK ? a + b : a + ' ' + b);
+  // 数量状态：已选 / 需要 / 还差或多出（数字直接取自原 state 与原计算结果）
+  const countState = (selected: number, target: number) => (selected === target ? 'ok' : selected < target ? 'short' : 'over');
+  const countText = (selected: number, target: number) => {
+    const s = countState(selected, target);
+    const key = s === 'ok' ? 'countOk' : s === 'short' ? 'countShort' : 'countOver';
+    return t(key, { selected, target, diff: Math.abs(target - selected) });
+  };
+  const renderCount = (selected: number, target: number, testid?: string) => {
+    const s = countState(selected, target);
+    return (
+      <div className={'bc-count ' + (s === 'ok' ? 'is-ok' : 'is-warn')} data-testid={testid} role="status">
+        <span aria-hidden="true">{s === 'ok' ? '✓' : '!'}</span> {countText(selected, target)}
+      </div>
+    );
+  };
+
   // 渲染五行色分配（天珠/地珠）
-  const renderColorInputs = (colors: number[], setColors: (arr: number[]) => void, max: number, label: string) => (
-    <div style={{ marginBottom: 8 }}>
-      <strong>{label}：</strong>
-      {FIVE_COLOR_KEYS.map((key, i) => (
-        <span key={key} style={{ marginLeft: 8 }}>
-          {colorLabel(key)}
-          <input
-            type="number"
-            min={0}
-            max={max}
-            value={colors[i]}
-            onChange={e => {
+  // 显示层：步进器 + 数字框。onValue 函数体与旧版 onChange 完全一致；+/− 按钮只是用新值调用同一函数。
+  const renderColorInputs = (colors: number[], setColors: (arr: number[]) => void, max: number, label: string, testid?: string) => {
+    const total = colors.reduce((a, b) => a + b, 0);
+    return (
+      <div className="bc-colors" data-testid={testid}>
+        <div className="bc-colors-grid">
+          {FIVE_COLOR_KEYS.map((key, i) => {
+            const onValue = (e: { target: { value: string } }) => {
               const arr = [...colors];
               let v = Number(e.target.value);
               // 限制总和
@@ -306,65 +325,73 @@ const BraceletCustomizer: React.FC = () => {
               if (sum > max) v = max - (sum - v);
               arr[i] = v;
               setColors(arr);
-            }}
-            style={{ width: 40, marginLeft: 2 }}
-          />
-        </span>
-      ))}
-      <span style={{ marginLeft: 8, color: (colors.reduce((a, b) => a + b, 0) !== max) ? 'red' : '#888' }}>
-        {t('beadSummary', { count: colors.reduce((a, b) => a + b, 0), total: max, unit: t('unit.piece') })}
-      </span>
-    </div>
-  );
+            };
+            return (
+              <div key={key} className={'bc-color' + (colors[i] ? ' is-on' : '')}>
+                <span className="bc-color-name"><span className="bc-dot" style={{ background: COLOR_MAP[key] }} />{colorLabel(key)}</span>
+                <div className="bc-stepper">
+                  <button type="button" aria-label={`${colorLabel(key)} −1`} disabled={colors[i] <= 0} onClick={() => onValue({ target: { value: String(colors[i] - 1) } })}>−</button>
+                  <input type="number" inputMode="numeric" min={0} max={max} value={colors[i]} onChange={onValue} aria-label={`${label} ${colorLabel(key)}`} />
+                  <button type="button" aria-label={`${colorLabel(key)} +1`} disabled={total >= max} onClick={() => onValue({ target: { value: String(colors[i] + 1) } })}>+</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {renderCount(total, max, testid ? testid + '-count' : undefined)}
+      </div>
+    );
+  };
 
   // 渲染五行色分配（人珠）
   const renderRenColorInputs = (colors: number[], setColors: (arr: number[]) => void, max: number, label: string) => {
-    // 去掉"，自动计算"
-    const labelNoAuto = label.replace(/，自动计算/, '');
+    const total = colors.reduce((a, b) => a + b, 0);
     return (
-      <div style={{ marginBottom: 8, display: 'flex', alignItems: 'center' }}>
-        <strong>{labelNoAuto}：</strong>
-        {FIVE_COLOR_KEYS.map((key, i) => (
-          <span key={key} style={{ marginLeft: 8 }}>
-            {colorLabel(key)}
-            <input
-              type="number"
-              min={0}
-              max={max}
-              value={colors[i]}
-              onChange={e => {
-                const arr = [...colors];
-                let v = Number(e.target.value);
-                // 限制总和
-                arr[i] = v;
-                handleRenColorChange(arr);
-              }}
-              style={{ width: 40, marginLeft: 2 }}
-            />
-          </span>
-        ))}
-        <span style={{ marginLeft: 8, color: (colors.reduce((a, b) => a + b, 0) !== max) ? 'red' : '#888' }}>
-          {t('beadSummary', { count: colors.reduce((a, b) => a + b, 0), total: max, unit: t('unit.piece') })}
-        </span>
-        <button onClick={handleRenAutoMatch} style={{ marginLeft: 16, padding: '2px 12px', fontSize: 14, background: renManual ? '#ff9800' : '#eee', color: renManual ? '#fff' : '#333', border: 'none', borderRadius: 4, cursor: 'pointer' }}>
-          {t('autoMatch')}
-        </button>
-        {renManual && <span style={{ color: '#ff9800', marginLeft: 8 }}>{t('manualMatch')}</span>}
+      <div className="bc-colors" data-testid="ren">
+        <div className="bc-row-between">
+          <strong className="bc-label bc-label-flush" data-testid="ren-count" data-value={max}>{label}</strong>
+          <button type="button" data-testid="auto-match" onClick={handleRenAutoMatch} className={'bc-btn bc-btn-small ' + (renManual ? 'bc-btn-gold' : 'bc-btn-ghost')}>
+            {t('autoMatch')}
+          </button>
+        </div>
+        <p className="bc-note">{t('renTargetNote')}</p>
+        {renManual && <p className="bc-note bc-note-warn" data-testid="ren-manual">{t('manualMatch')}</p>}
+        <div className="bc-colors-grid">
+          {FIVE_COLOR_KEYS.map((key, i) => {
+            const onValue = (e: { target: { value: string } }) => {
+              const arr = [...colors];
+              let v = Number(e.target.value);
+              // 限制总和
+              arr[i] = v;
+              handleRenColorChange(arr);
+            };
+            return (
+              <div key={key} className={'bc-color' + (colors[i] ? ' is-on' : '')}>
+                <span className="bc-color-name"><span className="bc-dot" style={{ background: COLOR_MAP[key] }} />{colorLabel(key)}</span>
+                <div className="bc-stepper">
+                  <button type="button" aria-label={`${colorLabel(key)} −1`} disabled={colors[i] <= 0} onClick={() => onValue({ target: { value: String(colors[i] - 1) } })}>−</button>
+                  <input type="number" inputMode="numeric" min={0} max={max} value={colors[i]} onChange={onValue} aria-label={`${label} ${colorLabel(key)}`} />
+                  <button type="button" aria-label={`${colorLabel(key)} +1`} disabled={total >= max} onClick={() => onValue({ target: { value: String(colors[i] + 1) } })}>+</button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {renderCount(total, max, 'ren-status')}
       </div>
     );
   };
 
   // 渲染五色统计条
   const renderBalanceBar = () => {
-    const maxBar = 120;
     const maxVal = Math.max(...colorStats);
     return (
-      <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>
+      <div className="bc-bars">
         {FIVE_COLOR_KEYS.map((key, i) => (
-          <div key={key} style={{ marginRight: 8, textAlign: 'center' }}>
-            <div style={{ background: MAIN_COLORS[i]?.color, width: maxBar * (colorStats[i] / maxVal || 0.05), height: 12, borderRadius: 4, marginBottom: 2 }}></div>
-            <div style={{ fontSize: 12 }}>{colorLabel(key)}</div>
-            <div style={{ fontSize: 12 }}>{colorStats[i]}{t('unit.piece')}</div>
+          <div key={key} className="bc-bar-row">
+            <span className="bc-bar-name">{colorLabel(key)}</span>
+            <span className="bc-bar-track"><span className="bc-bar-fill" style={{ background: MAIN_COLORS[i]?.color, width: `${100 * (colorStats[i] / maxVal || 0.05)}%` }} /></span>
+            <span className="bc-bar-num">{colorStats[i]}</span>
           </div>
         ))}
       </div>
@@ -382,6 +409,8 @@ const BraceletCustomizer: React.FC = () => {
 
   // 自动生成天珠（根据客户生日和时辰，主珠与天珠联动）
   const handleAutoSky = () => {
+    // D2 修复：日期不存在（如 2 月 31 日）时不生成，界面显示错误
+    if (birthDay > getDaysInMonth(birthYear, birthMonth)) return;
     if (!birthYear || !birthMonth || !birthDay || !birthHour) {
       alert('请先填写生日和时辰');
       return;
@@ -444,6 +473,8 @@ const BraceletCustomizer: React.FC = () => {
 
   // 修改handleAutoEarth，使用earthYear, earthMonth, earthDay, earthHour
   const handleAutoEarth = () => {
+    // D2 修复：日期不存在时不生成
+    if (earthDay > getDaysInMonth(earthYear, earthMonth)) return;
     const birth: BirthDateTime = { year: earthYear, month: earthMonth, day: earthDay, hour: earthHour };
     const bazi = calculateBazi(birth);
     const stats = calculateFiveElementsStats(bazi);
@@ -465,227 +496,346 @@ const BraceletCustomizer: React.FC = () => {
     setEarthColors(arr);
   };
 
+  // ===== 显示层（仅布局与样式；所有取值、setter、计算均沿用上方原代码） =====
+  const balanceKey = balanceScore === 0 ? 'perfect' : balanceScore === 1 ? 'good' : balanceScore === 2 ? 'normal' : 'bad';
+  const gradeMaterial = (g: string) => (g === '上品' ? t('gradeMaterial.high') : g === '中品' ? t('gradeMaterial.mid') : t('gradeMaterial.low'));
+  const gradeText = (g: string) => (g === '上品' ? t('grade.high') : g === '中品' ? t('grade.mid') : t('grade.low'));
+  const genderText = (g: string) => (g === '男' ? t('gender.male') : t('gender.female'));
+  const colorList = (arr: number[]) => FIVE_COLOR_KEYS.map((key, i) => arr[i] ? `${colorLabel(key)} ${arr[i]}` : '').filter(Boolean).join(' · ') || '—';
+  const hourLabel = (v: number) => hours.find(h => h.value === v)?.label || '';
+  const monthText = (m: number) => (isCJK ? t('time.month', { month: m }) : new Intl.DateTimeFormat(i18n.resolvedLanguage || 'en', { month: 'short' }).format(new Date(2000, m - 1, 1)));
+  const yearText = (y: number) => (isCJK ? t('time.year', { year: y }) : String(y));
+  const dayText = (d: number) => (isCJK ? t('time.day', { day: d }) : String(d));
+  const colon = t('colon');
+  // D2：日期有效性（显示与按钮状态）
+  const birthInvalid = birthDay > daysInMonth;
+  const earthInvalid = earthDay > earthDaysInMonth;
+  const ymText = (y: number, m: number) => (isCJK ? yearText(y) + monthText(m) : `${monthText(m)} ${y}`);
+  const dayOptions = (max: number, current: number) => {
+    const list = Array.from({ length: max }, (_, i) => i + 1).map(d => <option key={d} value={d}>{dayText(d)}</option>);
+    if (current > max) list.push(<option key={current} value={current}>{dayText(current)}{t('invalidMark')}</option>);
+    return list;
+  };
+  const seg = (name: string, value: string, current: string, onPick: (v: string) => void, text: React.ReactNode) => (
+    <label key={value} className={'bc-seg-opt' + (current === value ? ' is-selected' : '')}>
+      <input type="radio" name={name} value={value} checked={current === value} onChange={e => onPick(e.target.value)} />
+      <span>{text}</span>
+    </label>
+  );
+
+  // 未选齐提示：已选数量与目标数量都直接取自原 state / 原计算（skyTotal、earthTotal、renTotal、maxSky、maxEarth、renCount）
+  const groups = [
+    { name: t('groupSky'), selected: skyTotal, target: maxSky, href: '#sec-sky' },
+    { name: t('groupEarth'), selected: earthTotal, target: maxEarth, href: '#sec-earth' },
+    { name: t('renBeads'), selected: renTotal, target: renCount, href: '#sec-ren' },
+  ];
+  const issues = groups.filter(g => g.selected !== g.target).map(g => ({
+    ...g,
+    text: t(g.selected < g.target ? 'todoShort' : 'todoOver', { group: g.name, diff: Math.abs(g.target - g.selected) }),
+  }));
+
+  // 客户信息折叠（纯显示状态）
+  const CUSTOMER_FIELDS = [
+    ['name', 'text', 'bc-f-half'], ['phone', 'tel', 'bc-f-half'],
+    ['email', 'email', 'bc-f-half'], ['wechat', 'text', 'bc-f-half'],
+    ['address', 'text', 'bc-f-full'], ['city', 'text', 'bc-f-third'],
+    ['province', 'text', 'bc-f-third'], ['zipcode', 'text', 'bc-f-third'],
+  ] as const;
+  const [custOpen, setCustOpen] = useState(false);
+  const custFilled = CUSTOMER_FIELDS.filter(([k]) => String(customer[k]).trim() !== '').length;
+
+  // 桌面结果栏：整页统一滚动；结果栏比视口高时，先随页面滚到底部再固定（不产生第二条滚动条）
+  const asideRef = React.useRef<HTMLElement>(null);
+  React.useEffect(() => {
+    const el = asideRef.current;
+    if (!el) return;
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const update = () => {
+      if (!mq.matches) { el.style.top = ''; return; }
+      const h = el.offsetHeight, vh = window.innerHeight;
+      el.style.top = (h + 32 <= vh ? 16 : vh - h - 16) + 'px';
+    };
+    update();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    window.addEventListener('resize', update);
+    return () => { ro?.disconnect(); window.removeEventListener('resize', update); };
+  }, []);
+
   return (
-    <div style={{ maxWidth: 700, margin: '0 auto', padding: 24 }}>
-      {/* 语言切换控件 */}
-      <div style={{ textAlign: 'right', marginBottom: 8 }}>
-        <select value={i18n.language} onChange={e => i18n.changeLanguage(e.target.value)}>
-          <option value="zh">中文</option>
-          <option value="en">English</option>
-          <option value="ja">日本語</option>
-          <option value="ko">한국어</option>
-          <option value="es">Español</option>
-          <option value="de">Deutsch</option>
-        </select>
-      </div>
+    <div className="bc-app">
+      <header className="bc-header">
+        <div className="bc-header-inner">
+          <img src={`${process.env.PUBLIC_URL}/acutherapy-logo.png`} alt="AcuTherapy Clinics" className="bc-logo" />
+          {/* 语言切换控件 */}
+          <select className="bc-lang" aria-label="Language" data-testid="lang" value={i18n.language} onChange={e => i18n.changeLanguage(e.target.value)}>
+            <option value="zh">中文</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="es">Español</option>
+            <option value="de">Deutsch</option>
+          </select>
+        </div>
+      </header>
+
       {/* 打印区域开始 */}
-      <div id="print-area">
-        <h1>{t('title')}</h1>
-        {/* 客户信息表单（可填写，打印时只显示文本） */}
-        <div style={{ marginBottom: 24, padding: 16, background: '#f5f5f5', borderRadius: 8, boxShadow: '0 1px 4px #eee' }}>
-          <h2 style={{ fontSize: 18, marginBottom: 12 }}>{t('customerInfo')}</h2>
-          <div className="customer-form" style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
-            <div style={{ flex: '1 1 200px' }}>
-              <label>{t('name')}：</label>
-              <span className="print-hide"><input type="text" value={customer.name} onChange={e => setCustomer({ ...customer, name: e.target.value })} style={{ width: '100%' }} /></span>
-              <span className="print-only">{customer.name}</span>
-            </div>
-            <div style={{ flex: '1 1 200px' }}>
-              <label>{t('phone')}：</label>
-              <span className="print-hide"><input type="text" value={customer.phone} onChange={e => setCustomer({ ...customer, phone: e.target.value })} style={{ width: '100%' }} /></span>
-              <span className="print-only">{customer.phone}</span>
-            </div>
-            <div style={{ flex: '1 1 200px' }}>
-              <label>{t('birthday')}：</label>
-              <span className="print-hide">
-                <select value={birthYear} onChange={e => setBirthYear(Number(e.target.value))} style={{ width: 80, marginRight: 4 }}>
-                  {years.map(y => <option key={y} value={y}>{t('time.year', { year: y })}</option>)}
-                </select>
-                <select value={birthMonth} onChange={e => setBirthMonth(Number(e.target.value))} style={{ width: 60, marginRight: 4 }}>
-                  {months.map(m => <option key={m} value={m}>{t('time.month', { month: m })}</option>)}
-                </select>
-                <select value={birthDay} onChange={e => setBirthDay(Number(e.target.value))} style={{ width: 60, marginRight: 4 }}>
-                  {Array.from({ length: daysInMonth }, (_, i) => i + 1).map(d => <option key={d} value={d}>{t('time.day', { day: d })}</option>)}
-                </select>
-                <select value={birthHour} onChange={e => setBirthHour(Number(e.target.value))} style={{ width: 120 }}>
-                  {hours.map(h => <option key={h.value} value={h.value}>{h.label}</option>)}
-                </select>
-              </span>
-              <span className="print-only">{birthYear}-{birthMonth}-{birthDay} {hours.find(h=>h.value===birthHour)?.label||''}</span>
-            </div>
-            <div style={{ flex: '1 1 200px' }}>
-              <label>{t('email')}：</label>
-              <span className="print-hide"><input type="email" value={customer.email} onChange={e => setCustomer({ ...customer, email: e.target.value })} style={{ width: '100%' }} /></span>
-              <span className="print-only">{customer.email}</span>
-            </div>
-            <div style={{ flex: '1 1 200px' }}>
-              <label>{t('wechat')}：</label>
-              <span className="print-hide"><input type="text" value={customer.wechat} onChange={e => setCustomer({ ...customer, wechat: e.target.value })} style={{ width: '100%' }} /></span>
-              <span className="print-only">{customer.wechat}</span>
-            </div>
-            <div style={{ flex: '2 1 400px' }}>
-              <label>{t('address')}：</label>
-              <span className="print-hide"><input type="text" value={customer.address} onChange={e => setCustomer({ ...customer, address: e.target.value })} style={{ width: '100%' }} /></span>
-              <span className="print-only">{customer.address}</span>
-            </div>
-            <div style={{ flex: '1 1 150px' }}>
-              <label>{t('city')}：</label>
-              <span className="print-hide"><input type="text" value={customer.city} onChange={e => setCustomer({ ...customer, city: e.target.value })} style={{ width: '100%' }} /></span>
-              <span className="print-only">{customer.city}</span>
-            </div>
-            <div style={{ flex: '1 1 150px' }}>
-              <label>{t('province')}：</label>
-              <span className="print-hide"><input type="text" value={customer.province} onChange={e => setCustomer({ ...customer, province: e.target.value })} style={{ width: '100%' }} /></span>
-              <span className="print-only">{customer.province}</span>
-            </div>
-            <div style={{ flex: '1 1 150px' }}>
-              <label>{t('zipcode')}：</label>
-              <span className="print-hide"><input type="text" value={customer.zipcode} onChange={e => setCustomer({ ...customer, zipcode: e.target.value })} style={{ width: '100%' }} /></span>
-              <span className="print-only">{customer.zipcode}</span>
-            </div>
-          </div>
-          {/* 打印时显示性别、品级、五色珠子数目 */}
-          <div className="print-only" style={{ marginTop: 16, fontSize: 16 }}>
-            <div><strong>{t('genderLabel')}：</strong>{gender}</div>
-            <div><strong>{t('gradeLabel')}：</strong>{grade}</div>
-            <div><strong>{t('stat')}：</strong>
-              {FIVE_COLOR_KEYS.map((key, i) => (
-                <span key={key} style={{ marginRight: 12, color: MAIN_COLORS[i]?.color }}>
-                  {colorLabel(key)}{skyColors[i] + earthColors[i] + renColors[i] + (mainColor === key ? 1 : 0)}{t('unit.piece')}
+      <div id="print-area" className="bc-main">
+        <h1 className="bc-title">{t('title')}</h1>
+        <div className="bc-layout">
+          <div className="bc-form">
+
+            {/* 1 性别 / 品级 */}
+            <section className="bc-card" id="sec-basic">
+              <h2 className="bc-card-title"><span className="bc-step">1</span>{t('genderLabel')} / {t('gradeLabel')}</h2>
+              <fieldset className="bc-fieldset" data-testid="gender">
+                <legend className="bc-label">{t('genderLabel')}</legend>
+                <div className="bc-seg">
+                  {seg('gender', '男', gender, v => setGender(v as '男' | '女'), t('gender.male'))}
+                  {seg('gender', '女', gender, v => setGender(v as '男' | '女'), t('gender.female'))}
+                </div>
+              </fieldset>
+              <fieldset className="bc-fieldset" data-testid="grade">
+                <legend className="bc-label">{t('gradeLabel')}</legend>
+                <div className="bc-choice-grid">
+                  {([['上品', 'grade.high'], ['中品', 'grade.mid'], ['下品', 'grade.low']] as const).map(([v, k]) => (
+                    <label key={v} className={'bc-choice' + (grade === v ? ' is-selected' : '')}>
+                      <input type="radio" name="grade" value={v} checked={grade === v} onChange={e => setGrade(e.target.value)} />
+                      <span className="bc-choice-title">{t(k)}</span>
+                      <span className="bc-choice-sub">{gradeMaterial(v)}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            </section>
+
+            {/* 2 天珠 */}
+            <section className="bc-card" id="sec-sky">
+              <h2 className="bc-card-title"><span className="bc-step">2</span>{t('skyBeads')}</h2>
+              <div className="bc-main-color" data-testid="main-color" data-value={mainColor}>
+                <span className="bc-label">{t('mainColor')}</span>
+                <span className="bc-chip"><span className="bc-dot bc-dot-lg" style={{ background: COLOR_MAP[mainColor] || '#e88f8f' }} />{COLOR_MAP[mainColor] ? colorLabel(mainColor) : mainColor}</span>
+                <span className="bc-note">{t('mainColorNote', { btn: t('autoSky') })}</span>
+              </div>
+              <div className="bc-field">
+                <label htmlFor="birth-y">{t('birthday')}</label>
+                <div className="bc-date">
+                  <select id="birth-y" data-testid="birth-y" value={birthYear} onChange={e => setBirthYear(Number(e.target.value))}>
+                    {years.map(y => <option key={y} value={y}>{yearText(y)}</option>)}
+                  </select>
+                  <select data-testid="birth-m" aria-label={t('birthday')} value={birthMonth} onChange={e => setBirthMonth(Number(e.target.value))}>
+                    {months.map(m => <option key={m} value={m}>{monthText(m)}</option>)}
+                  </select>
+                  <select data-testid="birth-d" aria-label={t('birthday')} aria-invalid={birthInvalid} aria-describedby={birthInvalid ? 'birth-err' : undefined} className={birthInvalid ? 'is-error' : ''} value={birthDay} onChange={e => setBirthDay(Number(e.target.value))}>
+                    {dayOptions(daysInMonth, birthDay)}
+                  </select>
+                  <select data-testid="birth-h" aria-label={t('birthday')} value={birthHour} onChange={e => setBirthHour(Number(e.target.value))}>
+                    {hours.map(h => <option key={h.value} value={h.value}>{h.label}</option>)}
+                  </select>
+                </div>
+                {birthInvalid && <p id="birth-err" role="alert" className="bc-error" data-testid="birth-error">{t('dateInvalid', { ym: ymText(birthYear, birthMonth), max: daysInMonth })}</p>}
+              </div>
+              <button type="button" data-testid="auto-sky" className="bc-btn bc-btn-primary bc-btn-block" disabled={birthInvalid} onClick={handleAutoSky}>{t('autoSky')}</button>
+              {renderColorInputs(skyColors, setSkyColors, maxSky, t('groupSky'), 'sky')}
+            </section>
+
+            {/* 3 地珠 */}
+            <section className="bc-card" id="sec-earth">
+              <h2 className="bc-card-title"><span className="bc-step">3</span>{t('earthBeads')}</h2>
+              <div className="bc-field">
+                <label htmlFor="earth-y">{t('selectTime')}</label>
+                <div className="bc-date">
+                  <select id="earth-y" data-testid="earth-y" value={earthYear} onChange={e => setEarthYear(Number(e.target.value))}>
+                    {years.map(y => <option key={y} value={y}>{yearText(y)}</option>)}
+                  </select>
+                  <select data-testid="earth-m" aria-label={t('selectTime')} value={earthMonth} onChange={e => setEarthMonth(Number(e.target.value))}>
+                    {months.map(m => <option key={m} value={m}>{monthText(m)}</option>)}
+                  </select>
+                  <select data-testid="earth-d" aria-label={t('selectTime')} aria-invalid={earthInvalid} aria-describedby={earthInvalid ? 'earth-err' : undefined} className={earthInvalid ? 'is-error' : ''} value={earthDay} onChange={e => setEarthDay(Number(e.target.value))}>
+                    {dayOptions(earthDaysInMonth, earthDay)}
+                  </select>
+                  <select data-testid="earth-h" aria-label={t('selectTime')} value={earthHour} onChange={e => setEarthHour(Number(e.target.value))}>
+                    {hours.map(h => <option key={h.value} value={h.value}>{h.label}</option>)}
+                  </select>
+                </div>
+                {earthInvalid && <p id="earth-err" role="alert" className="bc-error" data-testid="earth-error">{t('dateInvalid', { ym: ymText(earthYear, earthMonth), max: earthDaysInMonth })}</p>}
+              </div>
+              <button type="button" data-testid="auto-earth" className="bc-btn bc-btn-primary bc-btn-block" disabled={earthInvalid} onClick={handleAutoEarth}>{t('autoEarth')}</button>
+              {renderColorInputs(earthColors, setEarthColors, maxEarth, t('groupEarth'), 'earth')}
+            </section>
+
+            {/* 4 手链长度 / 人珠 */}
+            <section className="bc-card" id="sec-ren">
+              <h2 className="bc-card-title"><span className="bc-step">4</span>{t('braceletLength')} / {t('renBeads')}</h2>
+              <div className="bc-field">
+                <label htmlFor="len">{t('braceletLength')}</label>
+                <div className="bc-inline">
+                  <input id="len" data-testid="len" className="bc-input-num" type="number" inputMode="decimal" min={100} max={300} value={braceletLength} onChange={e => setBraceletLength(Number(e.target.value))} />
+                  <div className="bc-seg" data-testid="unit">
+                    {seg('unit', 'mm', lengthUnit, v => setLengthUnit(v as any), t('unit.mm'))}
+                    {seg('unit', 'cm', lengthUnit, v => setLengthUnit(v as any), t('unit.cm'))}
+                    {seg('unit', 'in', lengthUnit, v => setLengthUnit(v as any), t('unit.inch'))}
+                  </div>
+                </div>
+              </div>
+              <div className="bc-field" data-testid="ren-size" data-value={gender === '男' ? renBeadSize : 6}>
+                <span className="bc-label">{t('renSize')}</span>
+                {gender === '男' ? (
+                  <div className="bc-seg">
+                    {seg('renSize', '8', String(renBeadSize), v => setRenBeadSize(Number(v)), t('beadSize.8mm'))}
+                    {seg('renSize', '6', String(renBeadSize), v => setRenBeadSize(Number(v)), t('beadSize.6mm'))}
+                  </div>
+                ) : (
+                  <span className="bc-chip">{t('beadSize.6mm')}</span>
+                )}
+              </div>
+              {renderRenColorInputs(renColors, setRenColors, renCount, t('renBeads'))}
+            </section>
+
+            {/* 5 刻字 */}
+            <section className="bc-card" id="sec-engrave">
+              <label className="bc-check">
+                <input type="checkbox" data-testid="engrave" checked={engraving} onChange={e => setEngraving(e.target.checked)} />
+                <span className="bc-step">5</span>
+                <span className="bc-card-title-text">{t('engraving')}</span>
+              </label>
+              {engraving && (
+                <div className="bc-field bc-engrave">
+                  <input
+                    type="text"
+                    data-testid="engrave-text"
+                    aria-label={t('engraving')}
+                    aria-invalid={!!engravingError}
+                    aria-describedby="engrave-err"
+                    className={engravingError ? 'is-error' : ''}
+                    value={engravingText}
+                    onChange={handleEngravingInput}
+                    placeholder={t('inputHint')}
+                  />
+                  {engravingError && <p id="engrave-err" role="alert" className="bc-error" data-testid="engrave-error">{engravingError.match(/[A-Za-z]/) ? t('engravingError.en') : t('engravingError.zh')}</p>}
+                </div>
+              )}
+            </section>
+
+            {/* 6 客户信息（屏幕上放在定制选项之后、可折叠；打印时排在最前） */}
+            <section className={'bc-card bc-customer' + (custOpen ? ' is-open' : '')} id="sec-customer">
+              <button type="button" className="bc-cust-toggle print-hide" data-testid="customer-toggle" aria-expanded={custOpen} aria-controls="cust-body" onClick={() => setCustOpen(!custOpen)}>
+                <span className="bc-step">6</span>
+                <span className="bc-cust-head">
+                  <span className="bc-card-title-text">{t('customerInfo')}</span>
+                  <span className="bc-note">{t('customerNote', { n: custFilled, total: CUSTOMER_FIELDS.length })}</span>
                 </span>
-              ))}
-            </div>
+                <span className="bc-cust-action">{custOpen ? t('collapse') : t('expand')}<span aria-hidden="true" className="bc-chev">▾</span></span>
+              </button>
+              <h2 className="bc-card-title bc-print-title">{t('customerInfo')}</h2>
+              <div id="cust-body" className="bc-cust-body">
+                <div className="customer-form bc-fields">
+                  {CUSTOMER_FIELDS.map(([k, type, cls]) => (
+                    <div className={'bc-field ' + cls} key={k}>
+                      <label htmlFor={'f-' + k}>{t(k)}</label>
+                      <span className="print-hide"><input id={'f-' + k} data-testid={'c-' + k} type={type} value={customer[k]} onChange={e => setCustomer({ ...customer, [k]: e.target.value })} /></span>
+                      <span className="print-only">{customer[k]}</span>
+                    </div>
+                  ))}
+                  <div className="print-only">
+                    <strong>{t('birthday')}{colon}</strong>
+                    <span>{birthYear}-{birthMonth}-{birthDay} {hourLabel(birthHour)}</span>
+                  </div>
+                </div>
+              </div>
+              {/* 打印时显示性别、品级、五色珠子数目 */}
+              <div className="print-only" style={{ marginTop: 16, fontSize: 16 }}>
+                <div><strong>{t('genderLabel')}{colon}</strong>{genderText(gender)}</div>
+                <div><strong>{t('gradeLabel')}{colon}</strong>{gradeText(grade)}</div>
+                <div><strong>{t('stat')}{colon}</strong>
+                  {FIVE_COLOR_KEYS.map((key, i) => (
+                    <span key={key} style={{ marginRight: 12, color: MAIN_COLORS[i]?.color }}>
+                      {joinWord(colorLabel(key), beadsN(skyColors[i] + earthColors[i] + renColors[i] + (mainColor === key ? 1 : 0)))}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </section>
           </div>
+
+          {/* 结果 */}
+          <aside className="bc-summary" id="sec-result" ref={asideRef}>
+            <div className="bc-card bc-result">
+              <div className="bc-price-row">
+                <span className="bc-label">{t('totalPrice')}</span>
+                <span className="bc-price" data-testid="price">${totalPrice.toFixed(2)}</span>
+              </div>
+              {issues.length > 0 && (
+                <div className="bc-todo print-hide" data-testid="todo">
+                  <strong>{t('todoTitle')}</strong>
+                  <ul>
+                    {issues.map(g => (
+                      <li key={g.href}><span>{g.text}</span><a href={g.href}>{t('edit')}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className="bc-kv">
+                <div>
+                  <span>{t('braceletLength')}</span>
+                  <strong>
+                    <span data-testid="len-out">{userLengthMM.toFixed(2)} {t('unit.mm')}</span>
+                    {lengthUnit !== 'mm' && <span className="bc-kv-sub">{t('lenFrom', { value: braceletLength, unit: lengthUnit === 'cm' ? t('unit.cm') : t('unit.inch') })}</span>}
+                  </strong>
+                </div>
+                <div>
+                  <span>{t('totalBeadsLabel')}</span>
+                  <strong>
+                    <span data-testid="total-beads" data-value={totalBeads}>{beadsN(totalBeads)}</span>
+                    <span className="bc-kv-sub">{t('mainBead')} 1 + {t('groupSky')} {skyTotal} + {t('groupEarth')} {earthTotal} + {t('renBeads')} {renTotal}</span>
+                  </strong>
+                </div>
+              </div>
+              <div className="bc-svg-wrap">
+                <div className="bc-row-between">
+                  <span className="bc-label bc-label-flush">{t('structure')}</span>
+                  <span className="bc-note">{t('diagramNote', { beads: beadsN(totalBeads) })}</span>
+                </div>
+                {renderBraceletSVG()}
+              </div>
+              <div className="bc-balance">
+                <div className="bc-row-between">
+                  <span className="bc-label bc-label-flush">{t('balance')}</span>
+                  <span className={'bc-badge bc-badge-' + balanceKey} data-testid="balance" data-value={balanceKey}>{t(`balanceLevel.${balanceKey}`)}</span>
+                </div>
+                <div className="sr-only" data-testid="stat">{t('stat')}{colon}{FIVE_COLOR_KEYS.map((key, i) => joinWord(colorLabel(key), beadsN(colorStats[i]))).join(' ')}</div>
+                {renderBalanceBar()}
+              </div>
+              <dl className="bc-choices print-hide">
+                <div><dt>{t('genderLabel')} / {t('gradeLabel')}</dt><dd>{genderText(gender)} · {gradeText(grade)} · {gradeMaterial(grade)}</dd><a href="#sec-basic">{t('edit')}</a></div>
+                <div><dt>{t('groupSky')}</dt><dd>{colorList(skyColors)}</dd><a href="#sec-sky">{t('edit')}</a></div>
+                <div><dt>{t('groupEarth')}</dt><dd>{colorList(earthColors)}</dd><a href="#sec-earth">{t('edit')}</a></div>
+                <div><dt>{t('renBeads')}</dt><dd>{colorList(renColors)}</dd><a href="#sec-ren">{t('edit')}</a></div>
+                <div><dt>{t('customerInfo')}</dt><dd>{t('custFilled', { n: custFilled, total: CUSTOMER_FIELDS.length })}</dd><a href="#sec-customer" onClick={() => setCustOpen(true)}>{t('edit')}</a></div>
+              </dl>
+              <button type="button" data-testid="print-btn" className="bc-btn bc-btn-primary bc-btn-block bc-btn-lg" onClick={() => window.print()}>
+                {t('print')}
+              </button>
+              {orderStatus && <div style={{ marginTop: 12, color: orderStatus.includes('成功') ? 'green' : 'red' }}>{orderStatus}</div>}
+            </div>
+          </aside>
         </div>
-        <div style={{ marginBottom: 16 }}>
-          <label>{t('genderLabel')}：</label>
-          <select value={gender} onChange={e => setGender(e.target.value as '男' | '女')}>
-            <option value="男">{t('gender.male')}</option>
-            <option value="女">{t('gender.female')}</option>
-          </select>
-        </div>
-        <div style={{ marginBottom: 16 }}>
-          <label>{t('gradeLabel')}：</label>
-          <select value={grade} onChange={e => setGrade(e.target.value)}>
-            <option value="上品">{t('grade.high')}</option>
-            <option value="中品">{t('grade.mid')}</option>
-            <option value="下品">{t('grade.low')}</option>
-          </select>
-          <span style={{ color: '#888', marginLeft: 8 }}>
-            {grade === '上品' && t('gradeMaterial.high')}
-            {grade === '中品' && t('gradeMaterial.mid')}
-            {grade === '下品' && t('gradeMaterial.low')}
-          </span>
-        </div>
-        <div style={{ marginBottom: 16 }}>
-          <label>{t('mainColor')}：</label>
-          <select value={mainColor} onChange={e => setMainColor(e.target.value)} disabled>
-            {MAIN_COLORS.map(opt => <option key={opt.name} value={opt.name}>{opt.name}</option>)}
-          </select>
-          <span style={{ color: '#888', marginLeft: 8 }}>({t('mainColor')} {t('autoSky')})</span>
-        </div>
-        {/* 天珠/地珠分配区上方插入自动生成按钮 */}
-        <div style={{ marginBottom: 8 }}>
-          <button onClick={handleAutoSky} style={{ marginRight: 12, padding: '2px 12px', borderRadius: 4, border: '1px solid #aaa', background: '#f5f5f5', cursor: 'pointer' }}>{t('autoSky')}</button>
-          <span style={{ marginRight: 8 }}>
-            <select value={earthYear} onChange={e => setEarthYear(Number(e.target.value))} style={{ width: 80, marginRight: 4 }}>
-              {years.map(y => <option key={y} value={y}>{t('time.year', { year: y })}</option>)}
-            </select>
-            <select value={earthMonth} onChange={e => setEarthMonth(Number(e.target.value))} style={{ width: 60, marginRight: 4 }}>
-              {months.map(m => <option key={m} value={m}>{t('time.month', { month: m })}</option>)}
-            </select>
-            <select value={earthDay} onChange={e => setEarthDay(Number(e.target.value))} style={{ width: 60, marginRight: 4 }}>
-              {Array.from({ length: earthDaysInMonth }, (_, i) => i + 1).map(d => <option key={d} value={d}>{t('time.day', { day: d })}</option>)}
-            </select>
-            <select value={earthHour} onChange={e => setEarthHour(Number(e.target.value))} style={{ width: 120 }}>
-              {hours.map(h => <option key={h.value} value={h.value}>{h.label}</option>)}
-            </select>
-          </span>
-          <button onClick={handleAutoEarth} style={{ padding: '2px 12px', borderRadius: 4, border: '1px solid #aaa', background: '#f5f5f5', cursor: 'pointer' }}>{t('autoEarth')}</button>
-        </div>
-        {renderColorInputs(skyColors, setSkyColors, maxSky, t('skyBeads'))}
-        {renderColorInputs(earthColors, setEarthColors, maxEarth, t('earthBeads'))}
-        <div style={{ marginBottom: 8 }}>
-          <strong>{t('renBeads')}尺寸：</strong>
-          {gender === '男' ? (
-            <select value={renBeadSize} onChange={e => setRenBeadSize(Number(e.target.value))}>
-              <option value={8}>{t('beadSize.8mm')}</option>
-              <option value={6}>{t('beadSize.6mm')}</option>
-            </select>
-          ) : (
-            <span>{t('beadSize.6mm')}</span>
-          )}
-        </div>
-        {renderRenColorInputs(renColors, setRenColors, renCount, `${t('renBeads')}（${renCount}${t('unit.piece')}）`)}
-        <div style={{ marginBottom: 16 }}>
-          <label>{t('braceletLength')}：</label>
-          <input
-            type="number"
-            min={100}
-            max={300}
-            value={braceletLength}
-            onChange={e => setBraceletLength(Number(e.target.value))}
-            style={{ width: 80, marginLeft: 8 }}
-          />
-          <select value={lengthUnit} onChange={e => setLengthUnit(e.target.value as any)} style={{ marginLeft: 8 }}>
-            <option value="mm">{t('unit.mm')}</option>
-            <option value="cm">{t('unit.cm')}</option>
-            <option value="in">{t('unit.inch')}</option>
-          </select>
-        </div>
-        <div style={{ marginBottom: 16 }}>
-          <label>
-            <input type="checkbox" checked={engraving} onChange={e => setEngraving(e.target.checked)} />
-            {t('engraving')}
-          </label>
-          {engraving && (
-            <span>
-              <input
-                type="text"
-                value={engravingText}
-                onChange={handleEngravingInput}
-                placeholder={t('inputHint')}
-                style={{ marginLeft: 12, padding: 4, width: 80 }}
-              />
-              {engravingError && <span style={{ color: 'red', marginLeft: 8 }}>{engravingError.match(/[A-Za-z]/) ? t('engravingError.en') : t('engravingError.zh')}</span>}
-            </span>
-          )}
-        </div>
-        <div style={{ marginTop: 32 }}>
-          <strong>{t('totalPrice')}：</strong> <span>${totalPrice.toFixed(2)}</span>
-        </div>
-        <div style={{ marginTop: 8 }}>
-          <strong>{t('braceletLength')}：</strong> <span>{userLengthMM.toFixed(2)} {t(`unit.${lengthUnit}`)}</span>
-        </div>
-        <div style={{ marginTop: 8 }}>
-          <strong>{t('totalBeads', { count: totalBeads, unit: t('unit.piece') })}</strong>
-        </div>
-        <div style={{ marginTop: 8 }}>
-          <strong>{t('stat')}：</strong>
-          <span style={{ marginLeft: 8 }}>
-            {FIVE_COLOR_KEYS.map((key, i) => (
-              <span key={key} style={{ marginRight: 12, color: MAIN_COLORS[i]?.color }}>
-                {colorLabel(key)}{colorStats[i]}{t('unit.piece')}
-              </span>
-            ))}
-          </span>
-        </div>
-        <div style={{ marginTop: 8 }}>
-          <strong>{t('balance')}：</strong> <span>{t(`balanceLevel.${balanceScore === 0 ? 'perfect' : balanceScore === 1 ? 'good' : balanceScore === 2 ? 'normal' : 'bad'}`)}</span>
-          {renderBalanceBar()}
-        </div>
-        <div style={{ marginTop: 32, border: '1px solid #eee', padding: 16 }}>
-          <strong>{t('structure')}</strong>
-          {renderBraceletSVG()}
-        </div>
-        <div style={{ marginTop: 40, textAlign: 'center' }}>
-          <button onClick={() => window.print()} style={{ fontSize: 18, padding: '10px 36px', background: '#222', color: '#fff', border: 'none', borderRadius: 6, cursor: 'pointer' }}>
-            {t('print')}
-          </button>
-        </div>
-        {orderStatus && <div style={{ marginTop: 12, color: orderStatus.includes('成功') ? 'green' : 'red' }}>{orderStatus}</div>}
       </div>
       {/* 打印区域结束 */}
+
+      {/* 手机/平板：底部固定结果条 */}
+      <div className="bc-bottombar" data-testid="bottombar">
+        <div className="bc-bottombar-info">
+          <span className="bc-bottombar-price">${totalPrice.toFixed(2)}</span>
+          {issues.length > 0 ? (
+            <a className="bc-bottombar-warn" href={issues[0].href}>! {issues.length > 1 ? t('issuesCount', { n: issues.length }) : ''}{issues[0].text} ›</a>
+          ) : (
+            <span className="bc-bottombar-sub">{beadsN(totalBeads)} · {t(`balanceLevel.${balanceKey}`)}</span>
+          )}
+        </div>
+        <a className="bc-btn bc-btn-gold" href="#sec-result">{t('viewResult')}</a>
+      </div>
+
       {/* 其它内容（如按钮、交互）打印时隐藏 */}
       <style>{`
         @media print {
@@ -701,4 +851,4 @@ const BraceletCustomizer: React.FC = () => {
   );
 };
 
-export default BraceletCustomizer; 
+export default BraceletCustomizer;
