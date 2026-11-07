@@ -105,5 +105,11 @@
   "issuesCount": "{{n}} offen: ",
   "custFilled": "{{n}} von {{total}} ausgefüllt",
   "dateInvalid": "Dieses Datum gibt es nicht: {{ym}} hat nur {{max}} Tage. Bitte wählen Sie einen anderen Tag.",
-  "invalidMark": " (ungültig)"
+  "invalidMark": " (ungültig)",
+  "sheetOrder": "Konfiguration",
+  "sheetBeads": "Perlenkonfiguration",
+  "colType": "Art",
+  "colSize": "Größe",
+  "colTotal": "Gesamt",
+  "none": "Keine"
 }

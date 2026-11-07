@@ -166,11 +166,6 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
 .bc-bottombar-price { font-family: var(--font-head); font-size: 24px; font-weight: 700; color: #f3d9a8; }
 .bc-bottombar-sub { font-size: 13px; opacity: .9; }
 
-@media print {
-  .bc-bottombar, .bc-header { display: none !important; }
-  .bc-summary { position: static; }
-  .bc-layout { display: block; }
-}
 
 /* 手机/平板：锚点跳转与键盘聚焦时不被底部栏遮挡 */
 html { scroll-padding-top: 12px; }
@@ -204,13 +199,6 @@ html { scroll-padding-top: 12px; }
 .bc-bottombar-warn { color: #ffd9a0; font-size: 13px; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 2px 0; }
 .bc-bottombar > .bc-btn { flex: none; }
 
-@media print {
-  .bc-form { display: flex; flex-direction: column; }
-  #sec-customer { order: -1; padding: 20px; }
-  .bc-cust-body { display: block !important; padding: 0; }
-}
-.bc-print-title { display: none; }
-@media print { .bc-print-title { display: flex; } }
 
 /* 桌面：结果栏紧凑化；价格行在结果栏内 sticky，结果栏比视口高时价格仍保持可见 */
 @media (min-width: 1024px) {
@@ -234,3 +222,46 @@ html { scroll-padding-top: 12px; }
 @media (min-width: 1024px) { .bc-price-row { box-shadow: 0 8px 8px -8px rgba(2, 6, 111, .18); } }
 .bc-app select.is-error { border-color: var(--warn); border-width: 2px; }
 .bc-btn:disabled { background: #c9cad3; color: #fff; cursor: not-allowed; border-color: transparent; }
+
+/* ===== 打印 / 保存 PDF：一页单据 ===== */
+.bc-sheet { display: none; }
+@media print {
+  @page { margin: 11mm 12mm; }
+  html, body { background: #fff !important; }
+  .bc-app { padding: 0 !important; min-height: 0; }
+  .bc-header, .bc-bottombar, #print-area > .bc-title, #print-area > .bc-layout { display: none !important; }
+  #print-area { padding: 0 !important; max-width: none; }
+  .bc-sheet, .bc-sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .bc-sheet { display: block !important; color: var(--ink); font-family: var(--font-body); font-size: 10.5pt; line-height: 1.35; break-inside: avoid; }
+}
+.bc-sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--gold); }
+.bc-sheet-logo { height: 66px; width: auto; }
+.bc-sheet-title { margin: 0; font-family: var(--font-head); font-size: 22pt; color: var(--navy); font-weight: 700; text-align: right; }
+.bc-sheet-sec { margin-top: 20px; break-inside: avoid; }
+.bc-sheet-h { margin: 0 0 8px; font-size: 8.5pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+.bc-sheet-cust { margin: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px 16px; padding: 12px 14px; background: var(--bg); border-radius: 8px; }
+.bc-sheet-cust div { min-width: 0; }
+.bc-sheet-cust dt { font-size: 8pt; color: var(--muted); }
+.bc-sheet-cust dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.bc-sheet-mid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.bc-sheet-diagram .bc-svg { max-width: 100%; border: 1px solid var(--line); border-radius: 8px; background: #fafafa; }
+.bc-sheet-spec dl { margin: 0; }
+.bc-sheet-spec dl > div { display: grid; grid-template-columns: minmax(7em, auto) 1fr; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.bc-sheet-spec dl > div:first-child { border-top: 1px solid var(--line); }
+.bc-sheet-spec dt { color: var(--muted); white-space: nowrap; }
+.bc-sheet-spec dd { margin: 0; font-weight: 600; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.bc-sheet-spec small { font-weight: 400; color: var(--muted); font-size: 8.5pt; }
+.bc-sheet-engrave { font-family: var(--font-head); font-size: 13pt; color: var(--navy); }
+.bc-sheet .bc-badge { font-size: 9pt; padding: 1px 10px; }
+.bc-sheet-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.bc-sheet-table th, .bc-sheet-table td { padding: 7px 6px; text-align: center; border-bottom: 1px solid var(--line); }
+.bc-sheet-table thead th { font-size: 8.5pt; color: var(--muted); font-weight: 600; border-bottom: 1.5px solid var(--navy); white-space: nowrap; }
+.bc-sheet-table thead .bc-dot { width: 9px; height: 9px; margin-right: 4px; vertical-align: -1px; }
+.bc-sheet-table tbody th { text-align: left; font-weight: 600; }
+.bc-sheet-table td.is-zero { color: #b9babb; }
+.bc-sheet-table .bc-sheet-sum { font-weight: 700; color: var(--navy); }
+.bc-sheet-table tfoot th, .bc-sheet-table tfoot td { font-weight: 700; background: var(--navy-tint); border-bottom: 0; }
+.bc-sheet-table tfoot th { text-align: left; }
+.bc-sheet-foot { margin-top: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 18px; background: var(--navy-tint); border: 1.5px solid var(--navy); border-radius: 8px; }
+.bc-sheet-foot span { font-weight: 700; color: var(--navy); font-size: 12pt; }
+.bc-sheet-foot strong { font-family: var(--font-head); font-size: 24pt; color: var(--gold); font-variant-numeric: lining-nums tabular-nums; }

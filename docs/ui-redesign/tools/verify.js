@@ -61,8 +61,10 @@ const ok = (dev, name, pass, info = '') => out.push(`${pass ? '✅' : '❌'} [${
       await p.screenshot({ path: `${S}/shots/v2/${dev}-2-ren-short.png` });
     }
     const totalShown = Number(await T('total-beads').getAttribute('data-value'));
-    const circles = await p.locator('[data-testid=svg] circle').count();
+    const circles = await p.locator('#sec-result [data-testid=svg] circle').count();
     const brk = await p.locator('.bc-kv-sub').last().innerText();
+    const sheetCircles = await p.locator('.bc-sheet [data-testid=svg] circle').count();
+    ok(dev, '打印单据示意图珠子数 = 总珠数', sheetCircles === totalShown, `单据 ${sheetCircles} 颗`);
     ok(dev, '总珠数 = 示意图珠子数 = 分项相加', totalShown === circles && brk.replace(/[^\d+]/g, '').split('+').reduce((a, c) => a + Number(c), 0) === totalShown, `总数 ${totalShown}，示意图 ${circles} 颗，分项「${brk}」`);
     await T('auto-match').click(); await p.waitForTimeout(150);
     ok(dev, '智能匹配后人珠选齐', /已选齐/.test(await T('ren-status').innerText()));
@@ -115,5 +117,5 @@ const ok = (dev, name, pass, info = '') => out.push(`${pass ? '✅' : '❌'} [${
   }
   await b.close();
   console.log(out.join('\n'));
-  require('fs').mkdirSync(S + '/baseline', { recursive: true }); require('fs').writeFileSync(S + '/baseline/verify-v2.md', out.join('\n') + '\n');
+  require('fs').writeFileSync(S + '/baseline/verify-v2.md', out.join('\n') + '\n');
 })();

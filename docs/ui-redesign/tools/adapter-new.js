@@ -58,9 +58,14 @@ module.exports = {
     });
   },
   async printText(page) {
+    // 新版打印为一页单据（.bc-sheet），读取单据中的实际内容
     await page.emulateMedia({ media: 'print' });
-    const t = await page.evaluate(() => [...document.querySelectorAll('.print-only')].map(e => e.innerText.replace(/\s+/g, ' ').trim()).filter(Boolean));
-    await page.emulateMedia({ media: 'screen' });
-    return t;
+    const r = await page.evaluate(() => {
+      const sh = document.querySelector('.bc-sheet'); const q = k => sh.querySelector(`[data-print="${k}"]`)?.textContent.trim();
+      return { sheet: sh.innerText.replace(/\s+/g, ' ').trim(), visible: getComputedStyle(sh).display !== 'none', gender: q('gender'), grade: q('grade'), price: q('price'),
+        stats: [...sh.querySelectorAll('[data-print-stat]')].map(e => e.textContent.trim()) };
+    });
+    await page.emulateMedia({ media: null });
+    return r;
   },
 };

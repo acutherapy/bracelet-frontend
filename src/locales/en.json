@@ -105,5 +105,11 @@
   "issuesCount": "{{n}} to fix: ",
   "custFilled": "{{n}} of {{total}} filled",
   "dateInvalid": "This date does not exist: {{ym}} has only {{max}} days. Please choose another day.",
-  "invalidMark": " (invalid)"
+  "invalidMark": " (invalid)",
+  "sheetOrder": "Customization",
+  "sheetBeads": "Bead Configuration",
+  "colType": "Type",
+  "colSize": "Size",
+  "colTotal": "Total",
+  "none": "None"
 }

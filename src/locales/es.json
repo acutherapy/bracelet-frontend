@@ -105,5 +105,11 @@
   "issuesCount": "{{n}} pendientes: ",
   "custFilled": "{{n}} de {{total}} completados",
   "dateInvalid": "Esta fecha no existe: {{ym}} solo tiene {{max}} días. Elija otro día.",
-  "invalidMark": " (no válido)"
+  "invalidMark": " (no válido)",
+  "sheetOrder": "Personalización",
+  "sheetBeads": "Configuración de cuentas",
+  "colType": "Tipo",
+  "colSize": "Tamaño",
+  "colTotal": "Total",
+  "none": "Ninguno"
 }

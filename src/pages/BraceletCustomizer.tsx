@@ -727,31 +727,13 @@ const BraceletCustomizer: React.FC = () => {
                 </span>
                 <span className="bc-cust-action">{custOpen ? t('collapse') : t('expand')}<span aria-hidden="true" className="bc-chev">▾</span></span>
               </button>
-              <h2 className="bc-card-title bc-print-title">{t('customerInfo')}</h2>
               <div id="cust-body" className="bc-cust-body">
                 <div className="customer-form bc-fields">
                   {CUSTOMER_FIELDS.map(([k, type, cls]) => (
                     <div className={'bc-field ' + cls} key={k}>
                       <label htmlFor={'f-' + k}>{t(k)}</label>
-                      <span className="print-hide"><input id={'f-' + k} data-testid={'c-' + k} type={type} value={customer[k]} onChange={e => setCustomer({ ...customer, [k]: e.target.value })} /></span>
-                      <span className="print-only">{customer[k]}</span>
+                      <input id={'f-' + k} data-testid={'c-' + k} type={type} value={customer[k]} onChange={e => setCustomer({ ...customer, [k]: e.target.value })} />
                     </div>
-                  ))}
-                  <div className="print-only">
-                    <strong>{t('birthday')}{colon}</strong>
-                    <span>{birthYear}-{birthMonth}-{birthDay} {hourLabel(birthHour)}</span>
-                  </div>
-                </div>
-              </div>
-              {/* 打印时显示性别、品级、五色珠子数目 */}
-              <div className="print-only" style={{ marginTop: 16, fontSize: 16 }}>
-                <div><strong>{t('genderLabel')}{colon}</strong>{genderText(gender)}</div>
-                <div><strong>{t('gradeLabel')}{colon}</strong>{gradeText(grade)}</div>
-                <div><strong>{t('stat')}{colon}</strong>
-                  {FIVE_COLOR_KEYS.map((key, i) => (
-                    <span key={key} style={{ marginRight: 12, color: MAIN_COLORS[i]?.color }}>
-                      {joinWord(colorLabel(key), beadsN(skyColors[i] + earthColors[i] + renColors[i] + (mainColor === key ? 1 : 0)))}
-                    </span>
                   ))}
                 </div>
               </div>
@@ -819,6 +801,83 @@ const BraceletCustomizer: React.FC = () => {
               {orderStatus && <div style={{ marginTop: 12, color: orderStatus.includes('成功') ? 'green' : 'red' }}>{orderStatus}</div>}
             </div>
           </aside>
+        </div>
+        {/* ===== 打印 / 保存 PDF 专用单据（屏幕不显示；所有数值取自上方原计算） ===== */}
+        <div className="bc-sheet" data-testid="sheet">
+          <header className="bc-sheet-head">
+            <img src={`${process.env.PUBLIC_URL}/acutherapy-logo.png`} alt="AcuTherapy Clinics" className="bc-sheet-logo" />
+            <h1 className="bc-sheet-title">{t('title')}</h1>
+          </header>
+
+          <section className="bc-sheet-sec">
+            <h2 className="bc-sheet-h">{t('customerInfo')}</h2>
+            <dl className="bc-sheet-cust">
+              {([['name', 2], ['phone', 2], ['birthday', 2], ['email', 2], ['wechat', 2], ['zipcode', 2], ['address', 3], ['city', 2], ['province', 1]] as const).map(([k, span]) => (
+                <div key={k} style={{ gridColumn: `span ${span}` }}>
+                  <dt>{t(k)}</dt>
+                  <dd data-print={'c-' + k}>{k === 'birthday' ? `${birthYear}-${birthMonth}-${birthDay} ${hourLabel(birthHour)}` : (customer[k] || '—')}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          <section className="bc-sheet-sec bc-sheet-mid">
+            <div className="bc-sheet-diagram">
+              <h2 className="bc-sheet-h">{t('structure')}</h2>
+              {renderBraceletSVG()}
+            </div>
+            <div className="bc-sheet-spec">
+              <h2 className="bc-sheet-h">{t('sheetOrder')}</h2>
+              <dl>
+                <div><dt>{t('genderLabel')}</dt><dd data-print="gender">{genderText(gender)}</dd></div>
+                <div><dt>{t('gradeLabel')}</dt><dd><span data-print="grade">{gradeText(grade)}</span> · {gradeMaterial(grade)}</dd></div>
+                <div><dt>{t('mainColor')}</dt><dd><span className="bc-dot" style={{ background: COLOR_MAP[mainColor] || '#e88f8f' }} />{COLOR_MAP[mainColor] ? colorLabel(mainColor) : mainColor}</dd></div>
+                <div><dt>{t('braceletLength')}</dt><dd>{userLengthMM.toFixed(2)} {t('unit.mm')}{lengthUnit !== 'mm' && <small> · {t('lenFrom', { value: braceletLength, unit: lengthUnit === 'cm' ? t('unit.cm') : t('unit.inch') })}</small>}</dd></div>
+                <div><dt>{t('totalBeadsLabel')}</dt><dd>{beadsN(totalBeads)}</dd></div>
+                <div><dt>{t('balance')}</dt><dd><span className={'bc-badge bc-badge-' + balanceKey}>{t(`balanceLevel.${balanceKey}`)}</span></dd></div>
+                <div><dt>{t('engraving')}</dt><dd>{engraving && engravingText ? <strong className="bc-sheet-engrave">{engravingText}</strong> : t('none')}</dd></div>
+              </dl>
+            </div>
+          </section>
+
+          <section className="bc-sheet-sec">
+            <h2 className="bc-sheet-h">{t('sheetBeads')}</h2>
+            <table className="bc-sheet-table">
+              <thead>
+                <tr>
+                  <th>{t('colType')}</th><th>{t('colSize')}</th>
+                  {FIVE_COLOR_KEYS.map(key => <th key={key} data-print-color={key}><span className="bc-dot" style={{ background: COLOR_MAP[key] }} />{colorLabel(key)}</th>)}
+                  <th>{t('colTotal')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {([
+                  [t('mainBead'), sizes.main, FIVE_COLOR_KEYS.map(key => (mainColor === key ? 1 : 0)), 1],
+                  [t('groupSky'), sizes.sky, skyColors, skyTotal],
+                  [t('groupEarth'), sizes.earth, earthColors, earthTotal],
+                  [t('renBeads'), renBeadSize, renColors, renTotal],
+                ] as [string, number, number[], number][]).map(([name, size, arr, sum]) => (
+                  <tr key={name}>
+                    <th scope="row">{name}</th><td>{size} {t('unit.mm')}</td>
+                    {arr.map((v, i) => <td key={i} className={v ? '' : 'is-zero'}>{v || '·'}</td>)}
+                    <td className="bc-sheet-sum">{sum}</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="row" colSpan={2}>{t('stat')}</th>
+                  {FIVE_COLOR_KEYS.map((key, i) => <td key={key} data-print-stat={key}>{skyColors[i] + earthColors[i] + renColors[i] + (mainColor === key ? 1 : 0)}</td>)}
+                  <td className="bc-sheet-sum">{totalBeads}</td>
+                </tr>
+              </tfoot>
+            </table>
+          </section>
+
+          <footer className="bc-sheet-foot">
+            <span>{t('totalPrice')}</span>
+            <strong data-print="price">${totalPrice.toFixed(2)}</strong>
+          </footer>
         </div>
       </div>
       {/* 打印区域结束 */}

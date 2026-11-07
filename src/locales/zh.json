@@ -104,5 +104,11 @@
   "issuesCount": "{{n}} 项未选齐：",
   "custFilled": "已填 {{n}}/{{total}} 项",
   "dateInvalid": "所选日期不存在：{{ym}}只有 {{max}} 天，请重新选择「日」",
-  "invalidMark": "（无效）"
+  "invalidMark": "（无效）",
+  "sheetOrder": "定制内容",
+  "sheetBeads": "珠子配置",
+  "colType": "类别",
+  "colSize": "尺寸",
+  "colTotal": "合计",
+  "none": "无"
 }

@@ -8,13 +8,15 @@
 |---|---|---|
 | 新旧对照（30 个用例，同输入） | 完全一致 27/30；已授权变更 3 条（C07=D2，C18/C28=D1）；意外差异 0 | [compare-old-vs-new.md](compare-old-vs-new.md) |
 | D1 / D2 回归 | 14/14 通过 | [regress-d1-d2.md](regress-d1-d2.md) |
-| 手机 / iPad / 桌面完整流程 | 94 项 ✅ 0 项 ❌ | [verify-devices.md](verify-devices.md) |
+| 手机 / iPad / 桌面完整流程 | 98 项 ✅ 0 项 ❌ | [verify-devices.md](verify-devices.md) |
+| 打印 / 保存 PDF 一页单据（7 种情况 × Letter/A4） | 7/7：全部 1 页，价格与五色统计与屏幕一致 | [print-check.md](print-check.md) |
 | 旧版自身可重复性（固定时间连跑两次） | 30/30 一致 | [data/old-repeatability.md](data/old-repeatability.md) |
 
 已确认的业务调整（2026-11-07）：
 
 - **长度单位显示**：结果统一显示毫米并注明换算来源（如「170.00 毫米 / 由 17 厘米换算」），数值不变。
 - **D1**：人珠第一次手动调整即生效；手动选择保留到点击「智能匹配」。同时消除了页面空闲时的无限重渲染（空闲 3 秒 CPU：旧 3.00 秒 → 新 0.00 秒）。
+- **打印单据**：打印 / 保存 PDF 改为一页专用单据（客户信息、示意图、定制内容、珠子配置表、合计价格），内容涵盖旧版打印的全部信息。
 - **D2**：不存在的日期（如 2 月 31 日）显示错误，并禁止用于生成天珠或地珠；有效日期继续使用原算法。
 
 ## 截图（screenshots/）
@@ -28,6 +30,7 @@
 | ipad-1-top.jpg / ipad-2-ren-short.jpg | iPad 820 宽 |
 | desktop-5-sticky.jpg / laptop-5-sticky.jpg | 桌面 1440×900 / 1280×720：整页单一滚动，结果栏 sticky，价格常驻 |
 | desktop-lang-en.jpg / desktop-d2-date-error-en.jpg | 英文界面 |
+| print-sheet-zh.jpg / print-sheet-en.jpg / print-sheet-zh-letter.pdf | 打印 / 保存 PDF 的一页单据 |
 
 ## 如何重跑
 

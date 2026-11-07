@@ -104,5 +104,11 @@
   "issuesCount": "未完了 {{n}}件：",
   "custFilled": "{{n}}/{{total}} 項目入力済み",
   "dateInvalid": "選択した日付は存在しません：{{ym}}は{{max}}日までです。日を選び直してください。",
-  "invalidMark": "（無効）"
+  "invalidMark": "（無効）",
+  "sheetOrder": "カスタマイズ内容",
+  "sheetBeads": "ビーズ構成",
+  "colType": "種類",
+  "colSize": "サイズ",
+  "colTotal": "合計",
+  "none": "なし"
 }

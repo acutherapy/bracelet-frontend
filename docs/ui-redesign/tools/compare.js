@@ -6,6 +6,16 @@ const F = ['gender', 'grade', 'gradeNote', 'mainColor', 'birth', 'earthDate', 's
   'lenInput', 'unit', 'engraving', 'engraveText', 'engraveError', 'price', 'lenOut', 'totalBeads', 'stat', 'balance', 'beads', 'svgText'];
 // 打印内容：只比较信息集合（新版把生日加了“生日：”标签并移到地址之后）
 const normPrint = a => (a || []).map(s => s.replace(/^(生日|Birthday)：\s*/, '')).sort();
+// 打印：新版为一页单据，逐项核对旧版打印中的每个信息都出现在单据上，且性别、品级、五色统计、价格一致
+function printMatch(oldArr, nb, nstate) {
+  if (!nb || !nb.sheet) return JSON.stringify(normPrint(oldArr)) === JSON.stringify(normPrint(nb));
+  if (!oldArr) return true;
+  const line = oldArr.find(s => /五色珠子统计|Color Bead Stats/.test(s)) || '';
+  const items = oldArr.filter(s => s !== line).map(s => s.replace(/^(生日|Birthday)：\s*/, ''));
+  const g = (line.match(/性别：(\S+)/) || [])[1], gr = (line.match(/品级：(\S+)/) || [])[1];
+  const st = [...line.matchAll(/(\d+(?:\.\d+)?)颗/g)].map(m => m[1]).join(',');
+  return nb.visible && items.every(x => nb.sheet.includes(x)) && nb.gender === g && nb.grade === gr && nb.stats.join(',') === st && nb.price === nstate.price;
+}
 const short = r => `价格 ${r.price}｜主珠 ${r.mainColor}｜天 ${r.sky}｜地 ${r.earth}｜人 ${r.renSize}mm×${r.renCount}: ${r.ren}${r.renManual ? '（手动）' : ''}｜长度 ${r.lenOut}｜共 ${r.totalBeads} 颗｜五色 ${r.stat}｜${r.balance}` +
   (r.engraving ? `｜刻字「${r.engraveText}」${r.engraveError ? ' 错误:' + r.engraveError : ''}` : '');
 let rows = [], bad = 0, noted = 0, auth = 0;
@@ -24,7 +34,7 @@ A.forEach((a, i) => {
     if (f === 'lenOut' && parseFloat(x[f]) === parseFloat(y?.[f])) { notes.push(`${pre}长度数值相同 ${parseFloat(x[f])}，单位文字「${x[f]}」→「${y?.[f]}」`); continue; }
     diffs.push(`${pre}${f}: ${x[f]} → ${y?.[f]}`);
   }
-  if (JSON.stringify(normPrint(a.print)) !== JSON.stringify(normPrint(b.print))) (a.state.lenInput && /[A-Za-z]/.test(a.state.balance) ? notes : diffs).push('print: ' + JSON.stringify(a.print) + ' → ' + JSON.stringify(b.print));
+  if (!printMatch(a.print, b.print, b.state)) (a.state.lenInput && /[A-Za-z]/.test(a.state.balance) ? notes : diffs).push('print: ' + JSON.stringify(a.print) + ' → ' + JSON.stringify(b.print));
   if (JSON.stringify(a.dialogs) !== JSON.stringify(b.dialogs)) diffs.push('dialogs');
   if (b.errors.length) diffs.push('pageerror: ' + b.errors.join(';'));
   const why = AUTHORIZED[a.id];
