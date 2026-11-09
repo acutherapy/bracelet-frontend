@@ -1,0 +1,6 @@
+{
+  "name": "bracelet-ui-redesign-tests",
+  "private": true,
+  "description": "新旧版对照、D1/D2 回归、三端流程验证（需本机 Google Chrome）",
+  "dependencies": { "playwright-core": "1.48.2" }
+}

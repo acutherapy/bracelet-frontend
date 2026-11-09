@@ -1,0 +1,1666 @@
+{
+  "url": "http://localhost:5102/bracelet-frontend/",
+  "fixedTime": "2026-11-06T10:30:00 Pacific/Honolulu",
+  "date": "2026-11-07T21:30:15.804Z",
+  "results": [
+    {
+      "id": "C01",
+      "name": "默认加载（不做任何操作）",
+      "steps": [],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$135.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 4,
+        "stat": "1,1,1,1,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#e0e0e0|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C02",
+      "name": "男/上品/手填天珠2-1-1-2-1 地珠1-2-2-1-2/170mm",
+      "steps": [
+        [
+          "sky",
+          [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        ],
+        [
+          "earth",
+          [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "2,1,1,2,1",
+        "earth": "1,2,2,1,2",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$685.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 19,
+        "stat": "4,4,4,4,3",
+        "balance": "良好",
+        "beads": "12|#e53935|4 10|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 10|#4caf50|2 10|#4caf50|2 8|#4caf50|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C03",
+      "name": "女/中品/同C02天地珠",
+      "steps": [
+        [
+          "gender",
+          "女"
+        ],
+        [
+          "grade",
+          "中品"
+        ],
+        [
+          "sky",
+          [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        ],
+        [
+          "earth",
+          [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "女",
+        "grade": "中品",
+        "gradeNote": "玉石、玛瑙",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "2,1,1,2,1",
+        "earth": "1,2,2,1,2",
+        "renSize": "人珠尺寸：6毫米",
+        "renCount": 8,
+        "ren": "2,1,2,2,1",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$575.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 24,
+        "stat": "5,5,5,5,4",
+        "balance": "良好",
+        "beads": "10|#e53935|4 8|#e53935|2 6|#e53935|2 6|#e53935|2 6|#e53935|2 8|#fbc02d|2 6|#fbc02d|2 6|#fbc02d|2 6|#fbc02d|2 6|#fbc02d|2 8|#e0e0e0|2 8|#e0e0e0|2 6|#e0e0e0|2 6|#e0e0e0|2 6|#e0e0e0|2 8|#222|2 6|#222|2 6|#222|2 6|#222|2 8|#4caf50|2 8|#4caf50|2 6|#4caf50|2 6|#4caf50|2 6|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C04",
+      "name": "男/下品/人珠6mm/190mm",
+      "steps": [
+        [
+          "grade",
+          "下品"
+        ],
+        [
+          "renSize",
+          6
+        ],
+        [
+          "len",
+          "190"
+        ],
+        [
+          "sky",
+          [
+            1,
+            2,
+            2,
+            1,
+            1
+          ]
+        ],
+        [
+          "earth",
+          [
+            2,
+            2,
+            1,
+            1,
+            2
+          ]
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "下品",
+        "gradeNote": "玻璃或其它",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "1,2,2,1,1",
+        "earth": "2,2,1,1,2",
+        "renSize": "6",
+        "renCount": 7,
+        "ren": "2,0,2,2,1",
+        "renManual": false,
+        "lenInput": "190",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$555.00",
+        "lenOut": "190.00 毫米",
+        "totalBeads": 23,
+        "stat": "5,5,5,4,4",
+        "balance": "良好",
+        "beads": "12|#e53935|4 10|#e53935|2 10|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 10|#fbc02d|2 8|#fbc02d|2 6|#fbc02d|2 6|#fbc02d|2 10|#e0e0e0|2 8|#e0e0e0|2 6|#e0e0e0|2 6|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 6|#222|2 10|#4caf50|2 8|#4caf50|2 8|#4caf50|2 6|#4caf50|2 6|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C05",
+      "name": "自动天珠 1990-05-15 午时 + 自动地珠 2026-11-06 辰时 / 180mm",
+      "steps": [
+        [
+          "len",
+          "180"
+        ],
+        [
+          "birth",
+          {
+            "y": 1990,
+            "m": 5,
+            "d": 15,
+            "h": 11
+          }
+        ],
+        [
+          "autoSky"
+        ],
+        [
+          "earthDate",
+          {
+            "y": 2026,
+            "m": 11,
+            "d": 6,
+            "h": 7
+          }
+        ],
+        [
+          "autoEarth"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-5-15-11",
+        "earthDate": "2026-11-6-7",
+        "sky": "0,2,1,3,1",
+        "earth": "1,2,4,1,0",
+        "renSize": "8",
+        "renCount": 4,
+        "ren": "2,0,0,0,2",
+        "renManual": false,
+        "lenInput": "180",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$705.00",
+        "lenOut": "180.00 毫米",
+        "totalBeads": 20,
+        "stat": "3,5,5,4,3",
+        "balance": "一般",
+        "beads": "12|#e53935|4 10|#e53935|2 10|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 10|#e0e0e0|2 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 8|#4caf50|2 8|#4caf50|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "normal"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C06",
+      "name": "女/自动天珠 1985-12-31 子时 + 自动地珠 2024-02-29 亥时",
+      "steps": [
+        [
+          "gender",
+          "女"
+        ],
+        [
+          "birth",
+          {
+            "y": 1985,
+            "m": 12,
+            "d": 31,
+            "h": 23
+          }
+        ],
+        [
+          "autoSky"
+        ],
+        [
+          "earthDate",
+          {
+            "y": 2024,
+            "m": 2,
+            "d": 29,
+            "h": 21
+          }
+        ],
+        [
+          "autoEarth"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "女",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "yellow",
+        "birth": "1985-12-31-23",
+        "earthDate": "2024-2-29-21",
+        "sky": "2,1,2,0,2",
+        "earth": "2,1,1,0,4",
+        "renSize": "人珠尺寸：6毫米",
+        "renCount": 8,
+        "ren": "1,3,0,4,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$725.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 24,
+        "stat": "5,5,4,4,6",
+        "balance": "一般",
+        "beads": "10|#fbc02d|4 8|#fbc02d|2 8|#fbc02d|2 6|#fbc02d|2 6|#e0e0e0|2 6|#e0e0e0|2 6|#e0e0e0|2 6|#e0e0e0|2 8|#222|2 8|#222|2 6|#222|2 6|#222|2 6|#222|2 6|#222|2 8|#4caf50|2 8|#4caf50|2 6|#4caf50|2 6|#4caf50|2 6|#4caf50|2 8|#e53935|2 6|#e53935|2 6|#e53935|2 6|#e53935|2 6|#e53935|2",
+        "svgText": "",
+        "_balKey": "normal"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C07",
+      "name": "边界：先选31日再改2月，然后自动天珠",
+      "steps": [
+        [
+          "birth",
+          {
+            "y": 2001,
+            "m": 1,
+            "d": 31,
+            "h": 5
+          }
+        ],
+        [
+          "birth",
+          {
+            "m": 2
+          }
+        ],
+        [
+          "autoSky"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "2001-2-31-5",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$135.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 4,
+        "stat": "1,1,1,1,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#e0e0e0|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C08",
+      "name": "长度17.5厘米",
+      "steps": [
+        [
+          "sky",
+          [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        ],
+        [
+          "earth",
+          [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        ],
+        [
+          "unit",
+          "cm"
+        ],
+        [
+          "len",
+          "17.5"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "2,1,1,2,1",
+        "earth": "1,2,2,1,2",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "17.5",
+        "unit": "cm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$685.00",
+        "lenOut": "175.00 毫米",
+        "totalBeads": 19,
+        "stat": "4,4,4,4,3",
+        "balance": "良好",
+        "beads": "12|#e53935|4 10|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 10|#4caf50|2 10|#4caf50|2 8|#4caf50|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C09",
+      "name": "长度7英寸",
+      "steps": [
+        [
+          "sky",
+          [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        ],
+        [
+          "earth",
+          [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        ],
+        [
+          "unit",
+          "in"
+        ],
+        [
+          "len",
+          "7"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "2,1,1,2,1",
+        "earth": "1,2,2,1,2",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "7",
+        "unit": "in",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$685.00",
+        "lenOut": "177.80 毫米",
+        "totalBeads": 19,
+        "stat": "4,4,4,4,3",
+        "balance": "良好",
+        "beads": "12|#e53935|4 10|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 10|#4caf50|2 10|#4caf50|2 8|#4caf50|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C10",
+      "name": "长度下限100mm",
+      "steps": [
+        [
+          "sky",
+          [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        ],
+        [
+          "earth",
+          [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        ],
+        [
+          "len",
+          "100"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "2,1,1,2,1",
+        "earth": "1,2,2,1,2",
+        "renSize": "8",
+        "renCount": 0,
+        "ren": "0,0,0,0,0",
+        "renManual": false,
+        "lenInput": "100",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$595.00",
+        "lenOut": "100.00 毫米",
+        "totalBeads": 16,
+        "stat": "3,4,3,3,3",
+        "balance": "良好",
+        "beads": "12|#e53935|4 10|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 10|#4caf50|2 10|#4caf50|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C11",
+      "name": "长度上限300mm（人珠封顶8）",
+      "steps": [
+        [
+          "sky",
+          [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        ],
+        [
+          "earth",
+          [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        ],
+        [
+          "len",
+          "300"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "2,1,1,2,1",
+        "earth": "1,2,2,1,2",
+        "renSize": "8",
+        "renCount": 8,
+        "ren": "2,1,2,2,1",
+        "renManual": false,
+        "lenInput": "300",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$850.00",
+        "lenOut": "300.00 毫米",
+        "totalBeads": 24,
+        "stat": "5,5,5,5,4",
+        "balance": "良好",
+        "beads": "12|#e53935|4 10|#e53935|2 8|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 8|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 8|#222|2 10|#4caf50|2 10|#4caf50|2 8|#4caf50|2 8|#4caf50|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C12",
+      "name": "错误输入：长度50mm（低于min）",
+      "steps": [
+        [
+          "len",
+          "50"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 0,
+        "ren": "0,0,0,0,0",
+        "renManual": false,
+        "lenInput": "50",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$45.00",
+        "lenOut": "50.00 毫米",
+        "totalBeads": 1,
+        "stat": "0,1,0,0,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C13",
+      "name": "错误输入：长度清空",
+      "steps": [
+        [
+          "len",
+          ""
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 0,
+        "ren": "0,0,0,0,0",
+        "renManual": false,
+        "lenInput": "0",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$45.00",
+        "lenOut": "0.00 毫米",
+        "totalBeads": 1,
+        "stat": "0,1,0,0,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C14",
+      "name": "错误输入：长度400mm（高于max）",
+      "steps": [
+        [
+          "len",
+          "400"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 8,
+        "ren": "2,1,2,2,1",
+        "renManual": false,
+        "lenInput": "400",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$300.00",
+        "lenOut": "400.00 毫米",
+        "totalBeads": 9,
+        "stat": "2,2,2,2,1",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#e53935|2 8|#fbc02d|2 8|#fbc02d|2 8|#e0e0e0|2 8|#e0e0e0|2 8|#222|2 8|#4caf50|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C15",
+      "name": "错误输入：天珠超量 绿5再红5",
+      "steps": [
+        [
+          "skyOne",
+          0,
+          "5"
+        ],
+        [
+          "skyOne",
+          1,
+          "5"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "5,2,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "0,0,1,1,1",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$460.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 11,
+        "stat": "5,3,1,1,1",
+        "balance": "失衡",
+        "beads": "12|#e53935|4 10|#e53935|2 10|#e53935|2 8|#fbc02d|2 8|#e0e0e0|2 8|#222|2 10|#4caf50|2 10|#4caf50|2 10|#4caf50|2 10|#4caf50|2 10|#4caf50|2",
+        "svgText": "",
+        "_balKey": "bad"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C16",
+      "name": "错误输入：天珠负数 绿-2",
+      "steps": [
+        [
+          "skyOne",
+          0,
+          "-2"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "-2,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "3,0,0,0,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$60.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 2,
+        "stat": "1,1,0,0,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C17",
+      "name": "错误输入：地珠小数 黄1.5",
+      "steps": [
+        [
+          "earthOne",
+          2,
+          "1.5"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,1.5,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,0,1,1",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$192.50",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 5.5,
+        "stat": "1,1,1.5,1,1",
+        "balance": "失衡",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#fbc02d|2 8|#e0e0e0|2 8|#222|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "bad"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C18",
+      "name": "人珠手动3-3-3超量截断，然后智能匹配恢复",
+      "steps": [
+        [
+          "sky",
+          [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        ],
+        [
+          "earth",
+          [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        ],
+        [
+          "renOne",
+          0,
+          "3"
+        ],
+        [
+          "renOne",
+          1,
+          "3"
+        ],
+        [
+          "renOne",
+          2,
+          "3"
+        ],
+        [
+          "snap"
+        ],
+        [
+          "autoMatch"
+        ]
+      ],
+      "snaps": [
+        {
+          "gender": "男",
+          "grade": "上品",
+          "gradeNote": "水晶",
+          "mainColor": "red",
+          "birth": "1990-1-1-23",
+          "earthDate": "2026-11-6-9",
+          "sky": "2,1,1,2,1",
+          "earth": "1,2,2,1,2",
+          "renSize": "8",
+          "renCount": 3,
+          "ren": "3,0,0,0,0",
+          "renManual": true,
+          "lenInput": "170",
+          "unit": "mm",
+          "engraving": false,
+          "engraveText": null,
+          "engraveError": "",
+          "price": "$700.00",
+          "lenOut": "170.00 毫米",
+          "totalBeads": 19,
+          "stat": "6,4,3,3,3",
+          "balance": "失衡",
+          "beads": "12|#e53935|4 10|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 10|#4caf50|2 10|#4caf50|2 8|#4caf50|2 8|#4caf50|2 8|#4caf50|2 8|#4caf50|2",
+          "svgText": "",
+          "_balKey": "bad"
+        }
+      ],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "2,1,1,2,1",
+        "earth": "1,2,2,1,2",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$685.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 19,
+        "stat": "4,4,4,4,3",
+        "balance": "良好",
+        "beads": "12|#e53935|4 10|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 10|#4caf50|2 10|#4caf50|2 8|#4caf50|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C19",
+      "name": "刻字：AB",
+      "steps": [
+        [
+          "engrave",
+          true
+        ],
+        [
+          "engraveText",
+          "AB"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": true,
+        "engraveText": "AB",
+        "engraveError": "",
+        "price": "$210.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 4,
+        "stat": "1,1,1,1,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#e0e0e0|2 8|#4caf50|2",
+        "svgText": "AB",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C20",
+      "name": "刻字：abc→截断",
+      "steps": [
+        [
+          "engrave",
+          true
+        ],
+        [
+          "engraveText",
+          "abc"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": true,
+        "engraveText": "ab",
+        "engraveError": "",
+        "price": "$210.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 4,
+        "stat": "1,1,1,1,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#e0e0e0|2 8|#4caf50|2",
+        "svgText": "ab",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C21",
+      "name": "刻字：王小",
+      "steps": [
+        [
+          "engrave",
+          true
+        ],
+        [
+          "engraveText",
+          "王小"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": true,
+        "engraveText": "王",
+        "engraveError": "",
+        "price": "$210.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 4,
+        "stat": "1,1,1,1,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#e0e0e0|2 8|#4caf50|2",
+        "svgText": "王",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C22",
+      "name": "刻字：A王（混合）",
+      "steps": [
+        [
+          "engrave",
+          true
+        ],
+        [
+          "engraveText",
+          "A王"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": true,
+        "engraveText": "王",
+        "engraveError": "",
+        "price": "$210.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 4,
+        "stat": "1,1,1,1,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#e0e0e0|2 8|#4caf50|2",
+        "svgText": "王",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C23",
+      "name": "刻字：12（数字）",
+      "steps": [
+        [
+          "engrave",
+          true
+        ],
+        [
+          "engraveText",
+          "12"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": true,
+        "engraveText": "",
+        "engraveError": "只能输入1个汉字",
+        "price": "$210.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 4,
+        "stat": "1,1,1,1,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#e0e0e0|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C24",
+      "name": "刻字：输入后清空",
+      "steps": [
+        [
+          "engrave",
+          true
+        ],
+        [
+          "engraveText",
+          "AB"
+        ],
+        [
+          "engraveText",
+          ""
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": true,
+        "engraveText": "",
+        "engraveError": "只能输入1个汉字",
+        "price": "$210.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 4,
+        "stat": "1,1,1,1,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#e0e0e0|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C25",
+      "name": "刻字：输入后取消勾选",
+      "steps": [
+        [
+          "engrave",
+          true
+        ],
+        [
+          "engraveText",
+          "福"
+        ],
+        [
+          "engrave",
+          false
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$135.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 4,
+        "stat": "1,1,1,1,0",
+        "balance": "良好",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#e0e0e0|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C26",
+      "name": "性别 男→女→男（人珠尺寸是否回到8）",
+      "steps": [
+        [
+          "gender",
+          "女"
+        ],
+        [
+          "gender",
+          "男"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,0",
+        "earth": "0,0,0,0,0",
+        "renSize": "6",
+        "renCount": 4,
+        "ren": "1,0,1,1,1",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$150.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 5,
+        "stat": "1,1,1,1,1",
+        "balance": "极佳",
+        "beads": "12|#e53935|4 6|#fbc02d|2 6|#e0e0e0|2 6|#222|2 6|#4caf50|2",
+        "svgText": "",
+        "_balKey": "perfect"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C27",
+      "name": "自动天珠后手改天珠（主珠是否跟随）",
+      "steps": [
+        [
+          "birth",
+          {
+            "y": 1990,
+            "m": 5,
+            "d": 15,
+            "h": 11
+          }
+        ],
+        [
+          "autoSky"
+        ],
+        [
+          "sky",
+          [
+            0,
+            0,
+            0,
+            0,
+            7
+          ]
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-5-15-11",
+        "earthDate": "2026-11-6-9",
+        "sky": "0,0,0,0,7",
+        "earth": "0,0,0,0,0",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$485.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 11,
+        "stat": "1,1,1,1,7",
+        "balance": "失衡",
+        "beads": "12|#e53935|4 8|#fbc02d|2 8|#e0e0e0|2 10|#222|2 10|#222|2 10|#222|2 10|#222|2 10|#222|2 10|#222|2 10|#222|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "bad"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C28",
+      "name": "人珠手动后改长度150（人珠数是否保留）",
+      "steps": [
+        [
+          "sky",
+          [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        ],
+        [
+          "earth",
+          [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        ],
+        [
+          "renOne",
+          0,
+          "0"
+        ],
+        [
+          "len",
+          "150"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "水晶",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "2,1,1,2,1",
+        "earth": "1,2,2,1,2",
+        "renSize": "8",
+        "renCount": 0,
+        "ren": "0,0,1,1,0",
+        "renManual": true,
+        "lenInput": "150",
+        "unit": "mm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$650.00",
+        "lenOut": "150.00 毫米",
+        "totalBeads": 18,
+        "stat": "3,4,4,4,3",
+        "balance": "良好",
+        "beads": "12|#e53935|4 10|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 10|#4caf50|2 10|#4caf50|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C29",
+      "name": "英文界面 + 17厘米（单位标签）",
+      "steps": [
+        [
+          "lang",
+          "en"
+        ],
+        [
+          "sky",
+          [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        ],
+        [
+          "earth",
+          [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        ],
+        [
+          "unit",
+          "cm"
+        ],
+        [
+          "len",
+          "17"
+        ]
+      ],
+      "snaps": [],
+      "state": {
+        "gender": "男",
+        "grade": "上品",
+        "gradeNote": "Crystal",
+        "mainColor": "red",
+        "birth": "1990-1-1-23",
+        "earthDate": "2026-11-6-9",
+        "sky": "2,1,1,2,1",
+        "earth": "1,2,2,1,2",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,0,1,1,0",
+        "renManual": false,
+        "lenInput": "17",
+        "unit": "cm",
+        "engraving": false,
+        "engraveText": null,
+        "engraveError": "",
+        "price": "$685.00",
+        "lenOut": "170.00 mm",
+        "totalBeads": 19,
+        "stat": "4,4,4,4,3",
+        "balance": "Good",
+        "beads": "12|#e53935|4 10|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 10|#4caf50|2 10|#4caf50|2 8|#4caf50|2 8|#4caf50|2",
+        "svgText": "",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    },
+    {
+      "id": "C30",
+      "name": "完整订单 + 打印内容",
+      "steps": [
+        [
+          "customer",
+          {
+            "name": "测试客户",
+            "phone": "808-000-0000",
+            "email": "test@example.com",
+            "wechat": "wx_test",
+            "address": "1 Test St",
+            "city": "Honolulu",
+            "province": "HI",
+            "zipcode": "96817"
+          }
+        ],
+        [
+          "birth",
+          {
+            "y": 1978,
+            "m": 8,
+            "d": 8,
+            "h": 17
+          }
+        ],
+        [
+          "autoSky"
+        ],
+        [
+          "earthDate",
+          {
+            "y": 2026,
+            "m": 1,
+            "d": 1,
+            "h": 9
+          }
+        ],
+        [
+          "autoEarth"
+        ],
+        [
+          "grade",
+          "中品"
+        ],
+        [
+          "engrave",
+          true
+        ],
+        [
+          "engraveText",
+          "和"
+        ],
+        [
+          "print"
+        ]
+      ],
+      "snaps": [],
+      "print": {
+        "sheet": "和合珠（Hehe Beads）定制 客户信息 名字 测试客户 电话 808-000-0000 生日 1978-8-8 17:00-18:59 电子邮件 test@example.com 微信 wx_test 邮编 96817 通信地址 1 Test St 城市 Honolulu 省 HI 手链结构示意图 和 定制内容 性别 男 品级 中品 · 玉石、玛瑙 主珠颜色 白色 手链长度 170.00 毫米 珠子总数 19颗 五色平衡度 良好 主珠刻字（+ $75） 和 珠子配置 类别 尺寸 绿色 红色 黄色 白色 黑色 合计 主珠 12 毫米 · · · 1 · 1 天珠 10 毫米 1 1 2 2 1 7 地珠 8 毫米 2 2 1 1 2 8 人珠 8 毫米 1 1 1 · · 3 五色珠子统计 4 4 4 4 3 19 合计价格 $685.00",
+        "visible": true,
+        "gender": "男",
+        "grade": "中品",
+        "price": "$685.00",
+        "stats": [
+          "4",
+          "4",
+          "4",
+          "4",
+          "3"
+        ]
+      },
+      "state": {
+        "gender": "男",
+        "grade": "中品",
+        "gradeNote": "玉石、玛瑙",
+        "mainColor": "white",
+        "birth": "1978-8-8-17",
+        "earthDate": "2026-1-1-9",
+        "sky": "1,1,2,2,1",
+        "earth": "2,2,1,1,2",
+        "renSize": "8",
+        "renCount": 3,
+        "ren": "1,1,1,0,0",
+        "renManual": false,
+        "lenInput": "170",
+        "unit": "mm",
+        "engraving": true,
+        "engraveText": "和",
+        "engraveError": "",
+        "price": "$685.00",
+        "lenOut": "170.00 毫米",
+        "totalBeads": 19,
+        "stat": "4,4,4,4,3",
+        "balance": "良好",
+        "beads": "12|#e0e0e0|4 10|#e0e0e0|2 10|#e0e0e0|2 8|#e0e0e0|2 10|#222|2 8|#222|2 8|#222|2 10|#4caf50|2 8|#4caf50|2 8|#4caf50|2 8|#4caf50|2 10|#e53935|2 8|#e53935|2 8|#e53935|2 8|#e53935|2 10|#fbc02d|2 10|#fbc02d|2 8|#fbc02d|2 8|#fbc02d|2",
+        "svgText": "和",
+        "_balKey": "good"
+      },
+      "dialogs": [],
+      "errors": []
+    }
+  ]
+}
